@@ -1,4 +1,4 @@
-create table leads (
+create table dayton_cars_leads (
   id uuid primary key default gen_random_uuid(),
   year text,
   make text,
@@ -11,9 +11,9 @@ create table leads (
   created_at timestamptz default now()
 );
 
-alter table leads enable row level security;
+alter table dayton_cars_leads enable row level security;
 
 create policy "Allow public inserts"
-  on leads for insert
+  on dayton_cars_leads for insert
   to anon
   with check (true);

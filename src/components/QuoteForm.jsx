@@ -32,7 +32,7 @@ export default function QuoteForm() {
     setStatus('submitting')
     setError('')
     try {
-      const { error: insertError } = await supabase.from('leads').insert([form])
+      const { error: insertError } = await supabase.from('dayton_cars_leads').insert([form])
       if (insertError) throw insertError
       setStatus('success')
       setForm(initialState)
