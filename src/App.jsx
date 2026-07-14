@@ -42,8 +42,8 @@ function App() {
           <span className="logo">
             Dayton <span className="logo__accent">Cars into Cash</span>
           </span>
-          <a className="header__phone" href="tel:19375550123">
-            (937) 555-0123
+          <a className="header__phone" href="tel:19372966755">
+            (937) 296-6755
           </a>
         </div>
       </header>
@@ -106,7 +106,7 @@ function App() {
       <footer className="footer">
         <p>&copy; {new Date().getFullYear()} Dayton Cars into Cash. Serving Dayton, Ohio and the Miami Valley.</p>
         <p>
-          Call or text <a href="tel:19375550123">(937) 555-0123</a>
+          Call or text <a href="tel:19372966755">(937) 296-6755</a>
         </p>
       </footer>
     </div>

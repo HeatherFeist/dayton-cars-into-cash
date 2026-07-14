@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-import { db } from '../firebase'
+import { supabase } from '../supabaseClient'
 
 const CURRENT_YEAR = new Date().getFullYear()
 const YEARS = Array.from({ length: 40 }, (_, i) => CURRENT_YEAR + 1 - i)
@@ -33,10 +32,8 @@ export default function QuoteForm() {
     setStatus('submitting')
     setError('')
     try {
-      await addDoc(collection(db, 'leads'), {
-        ...form,
-        createdAt: serverTimestamp(),
-      })
+      const { error: insertError } = await supabase.from('leads').insert([form])
+      if (insertError) throw insertError
       setStatus('success')
       setForm(initialState)
     } catch (err) {
@@ -53,7 +50,7 @@ export default function QuoteForm() {
         <p>
           A Dayton Cars into Cash specialist will call you shortly with your
           cash offer. Prefer to talk now? Call{' '}
-          <a href="tel:19375550123">(937) 555-0123</a>.
+          <a href="tel:19372966755">(937) 296-6755</a>.
         </p>
         <button type="button" onClick={() => setStatus('idle')}>
           Submit another vehicle
