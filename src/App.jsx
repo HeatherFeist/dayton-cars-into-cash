@@ -7,7 +7,7 @@ const STEPS = [
   },
   {
     title: '2. Schedule Free Pickup',
-    body: "We come to you, anywhere in the Dayton area. Pick a time that works — often same-day or next-day.",
+    body: "We come to you, anywhere within 60 miles of Dayton. Pick a time that works — often same-day or next-day.",
   },
   {
     title: '3. Get Paid on the Spot',
@@ -26,12 +26,42 @@ const REASONS = [
   },
   {
     title: 'Local & Fast',
-    body: "We're based right here in Dayton, Ohio, with pickup across the Miami Valley.",
+    body: "We're based right here in Dayton, Ohio, with free pickup up to 60 miles out.",
   },
   {
     title: 'No Games, No Lowballing',
     body: 'The offer we give you is the cash you get. No surprise deductions at pickup.',
   },
+]
+
+// Cities/communities within roughly 60 miles of Dayton, OH
+const SERVICE_CITIES = [
+  'Dayton',
+  'Kettering',
+  'Beavercreek',
+  'Huber Heights',
+  'Fairborn',
+  'Riverside',
+  'Centerville',
+  'Miamisburg',
+  'Springfield',
+  'Xenia',
+  'Trotwood',
+  'Vandalia',
+  'Springboro',
+  'West Carrollton',
+  'Englewood',
+  'Troy',
+  'Piqua',
+  'Sidney',
+  'Greenville',
+  'Eaton',
+  'Middletown',
+  'Hamilton',
+  'Franklin',
+  'Wilmington',
+  'Washington Court House',
+  'Urbana',
 ]
 
 function App() {
@@ -58,7 +88,7 @@ function App() {
             </p>
             <ul className="hero__points">
               <li>✔ Instant online offer</li>
-              <li>✔ Free towing anywhere in the Dayton area</li>
+              <li>✔ Free towing up to 60 miles from Dayton</li>
               <li>✔ Paid same day, no hidden fees</li>
             </ul>
           </div>
@@ -92,6 +122,35 @@ function App() {
         </div>
       </section>
 
+      <section className="service-area">
+        <h2>Our Service Area</h2>
+        <p className="service-area__intro">
+          We pick up vehicles free of charge anywhere within a <strong>60-mile
+          radius of Dayton, Ohio</strong> — including these communities and
+          everywhere in between.
+        </p>
+        <div className="service-area__body">
+          <div className="service-area__map">
+            <iframe
+              title="Dayton Cars into Cash service area map"
+              src="https://www.google.com/maps?q=Dayton,+OH&z=8&output=embed"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            ></iframe>
+          </div>
+          <ul className="service-area__cities">
+            {SERVICE_CITIES.map((city) => (
+              <li key={city}>{city}</li>
+            ))}
+          </ul>
+        </div>
+        <p className="service-area__note">
+          Not sure if you're in range? Call or text{' '}
+          <a href="tel:19372966755">(937) 296-6755</a> — we'll let you know right away.
+        </p>
+      </section>
+
       <section className="cta">
         <h2>Ready for a No-Obligation Cash Offer?</h2>
         <p>It takes less than 2 minutes.</p>
@@ -104,7 +163,7 @@ function App() {
       </section>
 
       <footer className="footer">
-        <p>&copy; {new Date().getFullYear()} Dayton Cars into Cash. Serving Dayton, Ohio and the Miami Valley.</p>
+        <p>&copy; {new Date().getFullYear()} Dayton Cars into Cash. Serving Dayton, Ohio and everywhere within 60 miles.</p>
         <p>
           Call or text <a href="tel:19372966755">(937) 296-6755</a>
         </p>
