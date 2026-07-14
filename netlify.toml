@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Single-page app: serve index.html for any route so client-side
+# navigation and page refreshes don't 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
