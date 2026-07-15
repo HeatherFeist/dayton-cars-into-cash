@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { supabase } from '../supabaseClient'
 import { estimateOffer, formatRange } from '../lib/estimateOffer'
+import { MAKES, modelsForMake, OTHER } from '../lib/vehicleData'
 
 const CURRENT_YEAR = new Date().getFullYear()
 const YEARS = Array.from({ length: 40 }, (_, i) => CURRENT_YEAR + 1 - i)
@@ -26,11 +27,26 @@ export default function QuoteForm() {
 
   function handleChange(e) {
     const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
+    setForm((prev) => {
+      // Changing the make invalidates the previously selected model, so clear
+      // it — otherwise a leftover model from the old make could be submitted.
+      if (name === 'make') return { ...prev, make: value, model: '' }
+      return { ...prev, [name]: value }
+    })
   }
+
+  // When "Other" make is chosen, there's no useful model dropdown, so let the
+  // customer type their model instead of forcing a single "Other" option.
+  const isOtherMake = form.make === OTHER
+  const modelOptions = modelsForMake(form.make)
+
+  // We can't buy a vehicle without a valid title, so block submission and show
+  // a message the moment "No Title" is selected.
+  const noTitle = form.condition === 'No Title'
 
   async function handleSubmit(e) {
     e.preventDefault()
+    if (noTitle) return
     setStatus('submitting')
     setError('')
     try {
@@ -84,20 +100,42 @@ export default function QuoteForm() {
             </option>
           ))}
         </select>
-        <input
-          name="make"
-          placeholder="Make (e.g. Honda)"
-          value={form.make}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="model"
-          placeholder="Model (e.g. Civic)"
-          value={form.model}
-          onChange={handleChange}
-          required
-        />
+        <select name="make" value={form.make} onChange={handleChange} required>
+          <option value="" disabled>
+            Make
+          </option>
+          {MAKES.map((m) => (
+            <option key={m} value={m}>
+              {m}
+            </option>
+          ))}
+        </select>
+        {isOtherMake ? (
+          <input
+            name="model"
+            placeholder="Model"
+            value={form.model}
+            onChange={handleChange}
+            required
+          />
+        ) : (
+          <select
+            name="model"
+            value={form.model}
+            onChange={handleChange}
+            required
+            disabled={!form.make}
+          >
+            <option value="" disabled>
+              {form.make ? 'Model' : 'Select make first'}
+            </option>
+            {modelOptions.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+        )}
         <select
           name="condition"
           value={form.condition}
@@ -147,8 +185,16 @@ export default function QuoteForm() {
           required
         />
       </div>
+      {noTitle && (
+        <p className="quote-form__notice">
+          Sorry, we cannot service without a valid title. If you can get a
+          replacement title, we'd be glad to make you an offer — or call us at{' '}
+          <a href="tel:19372966755">(937) 296-6755</a> to talk through your
+          options.
+        </p>
+      )}
       {error && <p className="quote-form__error">{error}</p>}
-      <button type="submit" disabled={status === 'submitting'}>
+      <button type="submit" disabled={status === 'submitting' || noTitle}>
         {status === 'submitting' ? 'Submitting…' : 'Get My Cash Offer'}
       </button>
       <p className="quote-form__disclaimer">

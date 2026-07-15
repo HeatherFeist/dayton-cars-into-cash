@@ -8,6 +8,8 @@ create table dayton_cars_leads (
   name text,
   phone text,
   email text,
+  estimate_low integer,
+  estimate_high integer,
   created_at timestamptz default now()
 );
 
