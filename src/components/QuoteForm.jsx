@@ -35,6 +35,7 @@ export default function QuoteForm() {
     setError('')
     try {
       const range = estimateOffer(form)
+      if (!supabase) throw new Error('Supabase is not configured')
       const { error: insertError } = await supabase.from('dayton_cars_leads').insert([
         { ...form, estimate_low: range.low, estimate_high: range.high },
       ])
