@@ -3,17 +3,14 @@ import QuoteForm from './components/QuoteForm'
 
 const STEPS = [
   {
-    icon: '📝',
     title: 'Tell Us About Your Car',
     body: 'Enter your year, make, model, and condition. It takes less than two minutes.',
   },
   {
-    icon: '💵',
     title: 'Get Your Instant Offer',
     body: 'See a real cash range right away, then we confirm your final offer by phone.',
   },
   {
-    icon: '🚗',
     title: 'Get Paid at Pickup',
     body: 'We tow it free and hand you cash or a check on the spot — often same day.',
   },
@@ -21,22 +18,18 @@ const STEPS = [
 
 const REASONS = [
   {
-    icon: '🔧',
     title: 'Any Condition, Any Vehicle',
     body: 'Running, wrecked, no title, flooded — we buy it. Cars, trucks, SUVs, and vans.',
   },
   {
-    icon: '🚛',
     title: 'Free Towing, Always',
     body: "We handle the tow truck. You don't pay a dime and you don't lift a wrench.",
   },
   {
-    icon: '📍',
     title: 'Local & Fast',
     body: "We're based right here in Dayton, Ohio, with free pickup up to 60 miles out.",
   },
   {
-    icon: '🤝',
     title: 'No Games, No Lowballing',
     body: 'The offer we give you is the cash you get. No surprise deductions at pickup.',
   },
@@ -123,6 +116,20 @@ function scrollToForm() {
   document.querySelector('.quote-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
+// Smooth-scroll to a section by id, used by the nav links. Only sections that
+// exist on this single-page site get a nav entry (see NAV_LINKS).
+function scrollToId(e, id) {
+  e.preventDefault()
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+// Peddle-style nav. This is a one-page site, so we only list the items that
+// map to a real section on the page; add more here as pages/sections exist.
+const NAV_LINKS = [
+  { id: 'how-it-works', label: 'How It Works' },
+  { id: 'reviews', label: 'Reviews' },
+]
+
 function App() {
   const [openFaq, setOpenFaq] = useState(0)
 
@@ -133,6 +140,18 @@ function App() {
           <span className="logo">
             Dayton <span className="logo__accent">Cars into Cash</span>
           </span>
+          <nav className="header__nav" aria-label="Primary">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.id}
+                className="header__nav-link"
+                href={`#${link.id}`}
+                onClick={(e) => scrollToId(e, link.id)}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
           <div className="header__actions">
             <a className="header__phone" href={PHONE_HREF}>
               {PHONE_DISPLAY}
@@ -191,15 +210,12 @@ function App() {
         </div>
       </section>
 
-      <section className="steps">
+      <section className="steps" id="how-it-works">
         <h2>How It Works</h2>
         <p className="section-sub">Three simple steps from junk car to cash.</p>
         <div className="steps__grid">
           {STEPS.map((step, i) => (
             <div className="step-card" key={step.title}>
-              <div className="step-card__icon" aria-hidden="true">
-                {step.icon}
-              </div>
               <span className="step-card__num">Step {i + 1}</span>
               <h3>{step.title}</h3>
               <p>{step.body}</p>
@@ -219,9 +235,6 @@ function App() {
         <div className="reasons__grid">
           {REASONS.map((reason) => (
             <div className="reason-card" key={reason.title}>
-              <div className="reason-card__icon" aria-hidden="true">
-                {reason.icon}
-              </div>
               <h3>{reason.title}</h3>
               <p>{reason.body}</p>
             </div>
@@ -229,7 +242,7 @@ function App() {
         </div>
       </section>
 
-      <section className="reviews">
+      <section className="reviews" id="reviews">
         <h2>What Our Customers Say</h2>
         <p className="section-sub">
           Placeholder reviews — replace with your real customer testimonials.
