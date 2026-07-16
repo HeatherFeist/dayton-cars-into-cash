@@ -92,6 +92,8 @@ body {
   color: #fff;
   font-size: 1.3rem;
   font-weight: 700;
+  cursor: default;
+  user-select: none; /* it's a secret tap target; don't select text on taps */
 }
 
 .logo__accent {
@@ -742,5 +744,214 @@ body {
 
   .hero__copy h1 {
     font-size: 1.9rem;
+  }
+}
+
+/* --- Hidden admin panel --------------------------------------------------- */
+.admin {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(10, 23, 51, 0.6);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 16px;
+  overflow-y: auto;
+}
+
+.admin__box {
+  position: relative;
+  background: #fff;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 980px;
+  padding: 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+}
+
+.admin__close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.admin__gate {
+  max-width: 320px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.admin__gate h2 {
+  margin: 0 0 6px;
+  color: var(--brand-dark);
+}
+
+.admin__gate p {
+  color: var(--muted);
+  margin: 0 0 16px;
+}
+
+.admin__gate input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cdd3dc;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.admin__gate button,
+.admin__refresh {
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin__gate button {
+  width: 100%;
+}
+
+.admin__error {
+  color: #c0392b;
+  font-size: 0.9rem;
+  margin: 0 0 12px;
+}
+
+.admin__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.admin__head h2 {
+  margin: 0;
+  color: var(--brand-dark);
+}
+
+.admin__refresh {
+  padding: 8px 14px;
+  font-size: 0.9rem;
+}
+
+.admin__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.admin__stat {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+
+.admin__stat strong {
+  display: block;
+  font-size: 1.8rem;
+  color: var(--brand);
+}
+
+.admin__stat span {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.admin__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin__panel h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  color: var(--brand-dark);
+}
+
+.admin__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.admin__list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border-bottom: 1px solid #eef0f3;
+  font-size: 0.9rem;
+}
+
+.admin__count {
+  font-weight: 700;
+  color: var(--teal);
+}
+
+.admin__muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.admin__log-title {
+  margin: 0 0 10px;
+  color: var(--brand-dark);
+}
+
+.admin__table-wrap {
+  overflow-x: auto;
+  border: 1px solid #eef0f3;
+  border-radius: 10px;
+}
+
+.admin__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.admin__table th,
+.admin__table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #eef0f3;
+}
+
+.admin__table th {
+  background: var(--bg);
+  color: var(--brand-dark);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 620px) {
+  .admin__stats {
+    grid-template-columns: 1fr;
+  }
+  .admin__cols {
+    grid-template-columns: 1fr;
   }
 }

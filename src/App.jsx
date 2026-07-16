@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import QuoteForm from './components/QuoteForm'
+import AdminPanel from './components/AdminPanel'
 
 const STEPS = [
   {
@@ -130,14 +131,34 @@ const NAV_LINKS = [
   { id: 'reviews', label: 'Reviews' },
 ]
 
+// How many logo taps, within this window, reveal the hidden admin panel.
+const ADMIN_TAPS = 6
+const ADMIN_TAP_WINDOW_MS = 2000
+
 function App() {
   const [openFaq, setOpenFaq] = useState(0)
+  const [adminOpen, setAdminOpen] = useState(false)
+
+  // Secret gesture: tap the logo ADMIN_TAPS times within the window to open
+  // the admin panel. Taps that come too slow reset the counter.
+  const tapTimes = useRef([])
+  function handleLogoTap() {
+    const now = Date.now()
+    tapTimes.current = [...tapTimes.current, now].filter(
+      (t) => now - t <= ADMIN_TAP_WINDOW_MS
+    )
+    if (tapTimes.current.length >= ADMIN_TAPS) {
+      tapTimes.current = []
+      setAdminOpen(true)
+    }
+  }
 
   return (
     <div className="page">
+      {adminOpen && <AdminPanel onClose={() => setAdminOpen(false)} />}
       <header className="header">
         <div className="header__inner">
-          <span className="logo">
+          <span className="logo" onClick={handleLogoTap} title="Dayton Cars into Cash">
             Dayton <span className="logo__accent">Cars into Cash</span>
           </span>
           <nav className="header__nav" aria-label="Primary">
