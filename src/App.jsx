@@ -163,6 +163,33 @@ function App() {
         </div>
       </header>
 
+      <section className="intro-video" id="intro-video">
+        <div className="intro-video__inner">
+          <h2 className="intro-video__title">See How It Works</h2>
+          <p className="intro-video__sub">
+            A quick look at how Dayton Cars into Cash turns your junk car into
+            cash — in under a minute.
+          </p>
+          {/*
+            VIDEO PLACEHOLDER. To go live, replace this block with either:
+              <video className="intro-video__player" controls poster="/video-poster.jpg">
+                <source src="/explainer.mp4" type="video/mp4" />
+              </video>
+            ...for a self-hosted MP4 (drop the file in /public), or an
+            <iframe> embed for YouTube/Vimeo. See VIDEO_SCRIPT.md for the
+            script and export notes.
+          */}
+          <div
+            className="intro-video__placeholder"
+            role="img"
+            aria-label="Explainer video coming soon"
+          >
+            <span className="intro-video__play" aria-hidden="true">▶</span>
+            <span className="intro-video__badge">Video coming soon</span>
+          </div>
+        </div>
+      </section>
+
       <section className="hero">
         <div className="hero__inner">
           <div className="hero__copy">
