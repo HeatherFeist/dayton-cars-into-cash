@@ -113,6 +113,10 @@ const FAQS = [
 const PHONE_DISPLAY = '(937) 296-6755'
 const PHONE_HREF = 'tel:19372966755'
 
+// Explainer video, self-hosted from public/. Vite serves public/ at the site
+// root, so public/explainer.mp4 is reachable at /explainer.mp4.
+const VIDEO_SRC = '/explainer.mp4'
+
 function scrollToForm() {
   document.querySelector('.quote-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
@@ -138,6 +142,7 @@ const ADMIN_TAP_WINDOW_MS = 2000
 function App() {
   const [openFaq, setOpenFaq] = useState(0)
   const [adminOpen, setAdminOpen] = useState(false)
+  const [videoPlaying, setVideoPlaying] = useState(false)
 
   // Secret gesture: tap the logo ADMIN_TAPS times within the window to open
   // the admin panel. Taps that come too slow reset the counter.
@@ -192,22 +197,36 @@ function App() {
             cash — in under a minute.
           </p>
           {/*
-            VIDEO PLACEHOLDER. To go live, replace this block with either:
-              <video className="intro-video__player" controls poster="/video-poster.jpg">
-                <source src="/explainer.mp4" type="video/mp4" />
-              </video>
-            ...for a self-hosted MP4 (drop the file in /public), or an
-            <iframe> embed for YouTube/Vimeo. See VIDEO_SCRIPT.md for the
-            script and export notes.
+            Self-hosted explainer. The MP4 lives at public/explainer.mp4 and is
+            served from the site root as /explainer.mp4. Until it's clicked we
+            show a branded poster with a play button (no autoplay, so the
+            narration never surprises anyone); the click swaps in the real
+            <video> and starts it. To use a poster IMAGE instead of the
+            gradient, add public/video-poster.jpg and set poster="/video-poster.jpg"
+            on the <video>. See VIDEO_SCRIPT.md for the script.
           */}
-          <div
-            className="intro-video__placeholder"
-            role="img"
-            aria-label="Explainer video coming soon"
-          >
-            <span className="intro-video__play" aria-hidden="true">▶</span>
-            <span className="intro-video__badge">Video coming soon</span>
-          </div>
+          {videoPlaying ? (
+            <video
+              className="intro-video__player"
+              src={VIDEO_SRC}
+              controls
+              autoPlay
+              playsInline
+            >
+              Sorry, your browser can't play this video. Call us at{' '}
+              {PHONE_DISPLAY}.
+            </video>
+          ) : (
+            <button
+              type="button"
+              className="intro-video__placeholder"
+              onClick={() => setVideoPlaying(true)}
+              aria-label="Play the explainer video"
+            >
+              <span className="intro-video__play" aria-hidden="true">▶</span>
+              <span className="intro-video__badge">Watch: How It Works</span>
+            </button>
+          )}
         </div>
       </section>
 

@@ -152,6 +152,21 @@ body {
   align-items: center;
   justify-content: center;
   gap: 16px;
+  cursor: pointer;
+  padding: 0;
+  transition: filter 0.15s ease;
+}
+
+.intro-video__placeholder:hover {
+  filter: brightness(1.06);
+}
+
+.intro-video__placeholder:hover .intro-video__play {
+  transform: scale(1.06);
+}
+
+.intro-video__play {
+  transition: transform 0.15s ease;
 }
 
 .intro-video__play {
