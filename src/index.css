@@ -1064,6 +1064,29 @@ body {
   outline: none;
 }
 
+.admin__delete {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.65;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.admin__delete:hover {
+  opacity: 1;
+  background: #fdecea;
+  border-color: #f5c6c0;
+}
+
+.admin__delete:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 @media (max-width: 620px) {
   .admin__stats {
     grid-template-columns: 1fr;

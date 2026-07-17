@@ -133,6 +133,28 @@ export default function AdminPanel({ onClose }) {
     }
   }
 
+  // Permanently delete a lead (e.g. a test submission). Confirms first, then
+  // removes it from the DB and the on-screen list.
+  async function deleteLead(lead) {
+    const who = lead.name || [lead.year, lead.make, lead.model].filter(Boolean).join(' ') || 'this lead'
+    if (!window.confirm(`Delete ${who}? This can't be undone.`)) return
+    setSavingId(lead.id)
+    try {
+      if (!supabase) throw new Error('Supabase is not configured.')
+      const { error } = await supabase.from('dayton_cars_leads').delete().eq('id', lead.id)
+      if (error) throw error
+      setLeads((prev) => prev.filter((l) => l.id !== lead.id))
+    } catch (err) {
+      console.error('Failed to delete', err)
+      setErrorMsg(
+        'Could not delete that lead. If this keeps happening, run ' +
+          'supabase/004_lead_delete_policy.sql to add the delete policy.'
+      )
+    } finally {
+      setSavingId(null)
+    }
+  }
+
   function exportCsv() {
     const csv = leadsToCsv(leads)
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
@@ -305,12 +327,13 @@ export default function AdminPanel({ onClose }) {
                         <th>Vehicle</th>
                         <th>Estimate</th>
                         <th>Notes</th>
+                        <th aria-label="Delete"></th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredLeads.length === 0 ? (
                         <tr>
-                          <td colSpan={9} className="admin__muted">
+                          <td colSpan={10} className="admin__muted">
                             {leads.length === 0 ? 'No leads yet.' : 'No leads match your search.'}
                           </td>
                         </tr>
@@ -375,6 +398,18 @@ export default function AdminPanel({ onClose }) {
                                   if (e.key === 'Enter') e.target.blur()
                                 }}
                               />
+                            </td>
+                            <td>
+                              <button
+                                type="button"
+                                className="admin__delete"
+                                title="Delete this lead"
+                                aria-label={`Delete lead ${lead.name || ''}`}
+                                disabled={savingId === lead.id}
+                                onClick={() => deleteLead(lead)}
+                              >
+                                🗑
+                              </button>
                             </td>
                           </tr>
                         ))
