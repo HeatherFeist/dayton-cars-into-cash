@@ -978,6 +978,92 @@ body {
   font-size: 0.8rem;
 }
 
+.admin__head-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin__export {
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin__export:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin__log-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.admin__search {
+  flex: 1;
+  min-width: 200px;
+  max-width: 320px;
+  padding: 8px 12px;
+  border: 1px solid #cdd3dc;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.admin__status {
+  border: 1px solid #cdd3dc;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: #fff;
+}
+
+/* Color-code the status so the owner can scan the table at a glance. */
+.admin__status--new {
+  color: #1d6fb8;
+  border-color: #1d6fb8;
+}
+.admin__status--contacted {
+  color: #b8860b;
+  border-color: #b8860b;
+}
+.admin__status--scheduled {
+  color: #7a3ea3;
+  border-color: #7a3ea3;
+}
+.admin__status--paid {
+  color: #1e824c;
+  border-color: #1e824c;
+}
+.admin__status--passed {
+  color: #8a8a8a;
+  border-color: #8a8a8a;
+}
+
+.admin__notes {
+  width: 100%;
+  min-width: 140px;
+  padding: 6px 8px;
+  border: 1px solid #e2e5ea;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.admin__notes:focus {
+  border-color: var(--teal);
+  outline: none;
+}
+
 @media (max-width: 620px) {
   .admin__stats {
     grid-template-columns: 1fr;

@@ -10,16 +10,17 @@ import { supabase } from '../supabaseClient'
 // path. Keep real secrets out of here.
 const ADMIN_PASSWORD = 'Admin'
 
-// Only these columns are shown in the log table, in this order. (The raw row
-// has more — condition answers etc. — but this keeps the table readable.)
-const COLUMNS = [
-  { key: 'created_at', label: 'Date' },
-  { key: 'name', label: 'Name' },
-  { key: 'phone', label: 'Phone' },
-  { key: 'email', label: 'Email' },
-  { key: 'zip', label: 'Zip' },
-  { key: 'vehicle', label: 'Vehicle' },
-  { key: 'estimate', label: 'Estimate' },
+// Follow-up statuses the owner can set per lead. Free text in the DB; this is
+// just the fixed set the dropdown offers.
+const STATUS_OPTIONS = ['New', 'Contacted', 'Scheduled', 'Paid', 'Passed']
+
+// Columns exported to CSV (and the order). Keeps every useful field so the CSV
+// opens cleanly in Google Sheets / Excel.
+const CSV_FIELDS = [
+  'created_at', 'status', 'name', 'phone', 'email', 'zip',
+  'year', 'make', 'model', 'trim', 'mileage',
+  'starts', 'wheels', 'whole', 'catalytic', 'bodyDamage', 'interior', 'title',
+  'estimate_low', 'estimate_high', 'notes',
 ]
 
 function fmtDate(iso) {
@@ -39,6 +40,20 @@ function dayKey(iso) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
+// Quote one CSV cell: wrap in quotes and double any inner quotes, so commas,
+// newlines, and quotes in notes/names don't break the file.
+function csvCell(value) {
+  if (value == null) return ''
+  const s = String(value)
+  return `"${s.replace(/"/g, '""')}"`
+}
+
+function leadsToCsv(leads) {
+  const header = CSV_FIELDS.join(',')
+  const rows = leads.map((lead) => CSV_FIELDS.map((f) => csvCell(lead[f])).join(','))
+  return [header, ...rows].join('\r\n')
+}
+
 export default function AdminPanel({ onClose }) {
   const [authed, setAuthed] = useState(false)
   const [pw, setPw] = useState('')
@@ -47,6 +62,8 @@ export default function AdminPanel({ onClose }) {
   const [status, setStatus] = useState('idle') // idle | loading | ready | error
   const [leads, setLeads] = useState([])
   const [errorMsg, setErrorMsg] = useState('')
+  const [query, setQuery] = useState('')
+  const [savingId, setSavingId] = useState(null) // id of the row currently saving
 
   // Close on Escape for convenience.
   useEffect(() => {
@@ -92,7 +109,61 @@ export default function AdminPanel({ onClose }) {
     }
   }
 
-  // --- Derived stats ---------------------------------------------------------
+  // Save an edited field (status or notes) for one lead. Optimistically update
+  // the UI, then persist; on failure, reload to resync.
+  async function saveLeadField(id, field, value) {
+    setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, [field]: value } : l)))
+    setSavingId(id)
+    try {
+      if (!supabase) throw new Error('Supabase is not configured.')
+      const { error } = await supabase
+        .from('dayton_cars_leads')
+        .update({ [field]: value })
+        .eq('id', id)
+      if (error) throw error
+    } catch (err) {
+      console.error('Failed to save', field, err)
+      setErrorMsg(
+        'Could not save your change. If this keeps happening, run ' +
+          'supabase/003_lead_status_and_notes.sql to add the status/notes columns and update policy.'
+      )
+      loadLeads() // resync from the server
+    } finally {
+      setSavingId(null)
+    }
+  }
+
+  function exportCsv() {
+    const csv = leadsToCsv(leads)
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    const stamp = new Date().toISOString().slice(0, 10)
+    a.href = url
+    a.download = `dayton-leads-${stamp}.csv`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  // --- Search filter ---------------------------------------------------------
+  const filteredLeads = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (!q) return leads
+    return leads.filter((lead) => {
+      const hay = [
+        lead.name, lead.phone, lead.email, lead.zip, lead.status,
+        lead.year, lead.make, lead.model, lead.notes,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+      return hay.includes(q)
+    })
+  }, [leads, query])
+
+  // --- Derived stats (over ALL leads, not the filtered view) -----------------
   const perDay = useMemo(() => {
     const counts = new Map()
     for (const lead of leads) {
@@ -141,9 +212,20 @@ export default function AdminPanel({ onClose }) {
           <div className="admin__dash">
             <div className="admin__head">
               <h2>Leads Dashboard</h2>
-              <button type="button" className="admin__refresh" onClick={loadLeads}>
-                ↻ Refresh
-              </button>
+              <div className="admin__head-actions">
+                <button
+                  type="button"
+                  className="admin__export"
+                  onClick={exportCsv}
+                  disabled={leads.length === 0}
+                  title="Download all leads as a CSV you can open in Google Sheets or Excel"
+                >
+                  ⇩ Export CSV
+                </button>
+                <button type="button" className="admin__refresh" onClick={loadLeads}>
+                  ↻ Refresh
+                </button>
+              </div>
             </div>
 
             {status === 'loading' && <p>Loading leads…</p>}
@@ -199,27 +281,57 @@ export default function AdminPanel({ onClose }) {
                   </div>
                 </div>
 
-                <h3 className="admin__log-title">All leads</h3>
+                <div className="admin__log-head">
+                  <h3 className="admin__log-title">All leads</h3>
+                  <input
+                    className="admin__search"
+                    type="search"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search name, phone, zip, vehicle…"
+                  />
+                </div>
+
                 <div className="admin__table-wrap">
                   <table className="admin__table">
                     <thead>
                       <tr>
-                        {COLUMNS.map((c) => (
-                          <th key={c.key}>{c.label}</th>
-                        ))}
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Zip</th>
+                        <th>Vehicle</th>
+                        <th>Estimate</th>
+                        <th>Notes</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {leads.length === 0 ? (
+                      {filteredLeads.length === 0 ? (
                         <tr>
-                          <td colSpan={COLUMNS.length} className="admin__muted">
-                            No leads yet.
+                          <td colSpan={9} className="admin__muted">
+                            {leads.length === 0 ? 'No leads yet.' : 'No leads match your search.'}
                           </td>
                         </tr>
                       ) : (
-                        leads.map((lead) => (
+                        filteredLeads.map((lead) => (
                           <tr key={lead.id}>
                             <td>{fmtDate(lead.created_at)}</td>
+                            <td>
+                              <select
+                                className={`admin__status admin__status--${(lead.status || 'New').toLowerCase()}`}
+                                value={lead.status || 'New'}
+                                disabled={savingId === lead.id}
+                                onChange={(e) => saveLeadField(lead.id, 'status', e.target.value)}
+                              >
+                                {STATUS_OPTIONS.map((s) => (
+                                  <option key={s} value={s}>
+                                    {s}
+                                  </option>
+                                ))}
+                              </select>
+                            </td>
                             <td>{lead.name || '—'}</td>
                             <td>{lead.phone || '—'}</td>
                             <td>{lead.email || '—'}</td>
@@ -244,6 +356,25 @@ export default function AdminPanel({ onClose }) {
                               ) : (
                                 '—'
                               )}
+                            </td>
+                            <td>
+                              <input
+                                className="admin__notes"
+                                type="text"
+                                defaultValue={lead.notes || ''}
+                                placeholder="Add a note…"
+                                disabled={savingId === lead.id}
+                                // Save on blur (leaving the field) or Enter, so we
+                                // don't write on every keystroke.
+                                onBlur={(e) => {
+                                  if (e.target.value !== (lead.notes || '')) {
+                                    saveLeadField(lead.id, 'notes', e.target.value)
+                                  }
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') e.target.blur()
+                                }}
+                              />
                             </td>
                           </tr>
                         ))
