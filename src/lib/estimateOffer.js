@@ -45,16 +45,17 @@ const CATALYTIC_CONVERTER_VALUE = 150
 // Order matters: first match wins, so put more specific / heavier types
 // before lighter ones.
 const BODY_TYPE_WEIGHT_TONS = [
-  // Heavy-duty & full-size pickups
-  { test: /f-?250|f-?350|silverado ?2500|silverado ?3500|ram ?2500|ram ?3500|sierra ?2500|sierra ?3500|super ?duty/i, tons: 3.2 },
-  // Light-duty pickups
-  { test: /truck|pickup|silverado|sierra|f-?150|ram|tundra|tacoma|ranger|frontier|colorado|ridgeline|canyon/i, tons: 2.5 },
-  // Full-size SUVs & vans
-  { test: /suburban|tahoe|yukon|expedition|sequoia|escalade|denali|armada|navigator/i, tons: 2.9 },
+  // Heavy-duty & full-size pickups (3/4- and 1-ton). "ram 2500/3500" as a
+  // standalone Ram make reads as "Ram 2500", so match that too.
+  { test: /f-?250|f-?350|silverado ?2500|silverado ?3500|ram ?2500|ram ?3500|sierra ?2500|sierra ?3500|super ?duty|promaster/i, tons: 3.2 },
+  // Light-duty pickups (incl. standalone Ram 1500, and newer midsize trucks)
+  { test: /truck|pickup|silverado|sierra|f-?150|\bram\b|1500|tundra|tacoma|ranger|maverick|frontier|colorado|ridgeline|canyon|gladiator|santa cruz|titan/i, tons: 2.5 },
+  // Full-size SUVs & vans (incl. newer big SUVs)
+  { test: /suburban|tahoe|yukon|expedition|sequoia|escalade|denali|armada|navigator|wagoneer|palisade|telluride|grand wagoneer|gx|lx|qx80|gls/i, tons: 2.9 },
   // Minivans / cargo vans
-  { test: /van|caravan|odyssey|sienna|pacifica|transit|express|savana|town ?&? ?country/i, tons: 2.25 },
-  // Midsize/compact SUVs & crossovers
-  { test: /suv|explorer|pilot|highlander|4runner|traverse|equinox|rav4|cr-?v|rogue|escape|blazer|durango|edge|cherokee|wrangler|forester|outback|cx-?5/i, tons: 2.0 },
+  { test: /van|caravan|odyssey|sienna|pacifica|carnival|sedona|transit|express|savana|town ?&? ?country|voyager/i, tons: 2.25 },
+  // Midsize/compact SUVs & crossovers (incl. newer nameplates)
+  { test: /suv|explorer|pilot|passport|highlander|4runner|traverse|ascent|equinox|rav4|cr-?v|rogue|escape|bronco|blazer|durango|edge|cherokee|wrangler|forester|outback|crosstrek|cx-?5|cx-?9|cx-?90|sorento|santa fe|tucson|sportage|seltos|kicks|trailblazer|trax|kona|venue|atlas|tiguan|4motion|q5|q7|x3|x5|glc|gle|rx|nx|mdx|rdx/i, tons: 2.0 },
   // Sedans / coupes / everything else
   { test: /.*/, tons: 1.7 },
 ]
