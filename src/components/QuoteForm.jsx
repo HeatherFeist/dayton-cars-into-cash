@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient'
 import { estimateOffer, formatRange } from '../lib/estimateOffer'
 import { MAKES, modelsForMake, OTHER } from '../lib/vehicleData'
 import { CONDITION_QUESTIONS, NO_TITLE_VALUE } from '../lib/conditionQuestions'
+import { notifyNewLead } from '../lib/notifyLead'
 
 const CURRENT_YEAR = new Date().getFullYear()
 const YEARS = Array.from({ length: 40 }, (_, i) => CURRENT_YEAR + 1 - i)
@@ -130,6 +131,9 @@ export default function QuoteForm() {
         },
       ])
       if (insertError) throw insertError
+      // Ping the owner's phone with the new lead + quote. Fire-and-forget: it
+      // guards its own errors, so it never blocks or fails the submission.
+      notifyNewLead(form, range)
       setEstimate(range)
       setStatus('success')
     } catch (err) {

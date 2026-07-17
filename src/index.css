@@ -962,6 +962,22 @@ body {
   border-bottom: none;
 }
 
+.admin__quote {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.admin__quote strong {
+  color: var(--brand);
+  font-size: 1rem;
+}
+
+.admin__quote-range {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
 @media (max-width: 620px) {
   .admin__stats {
     grid-template-columns: 1fr;

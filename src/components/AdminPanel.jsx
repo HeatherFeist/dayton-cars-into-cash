@@ -228,9 +228,22 @@ export default function AdminPanel({ onClose }) {
                               {[lead.year, lead.make, lead.model].filter(Boolean).join(' ') || '—'}
                             </td>
                             <td>
-                              {lead.estimate_low != null && lead.estimate_high != null
-                                ? `$${lead.estimate_low}–$${lead.estimate_high}`
-                                : '—'}
+                              {lead.estimate_low != null && lead.estimate_high != null ? (
+                                <span className="admin__quote">
+                                  <strong>
+                                    ~$
+                                    {Math.round(
+                                      (lead.estimate_low + lead.estimate_high) / 2
+                                    ).toLocaleString('en-US')}
+                                  </strong>
+                                  <span className="admin__quote-range">
+                                    ${lead.estimate_low.toLocaleString('en-US')}–$
+                                    {lead.estimate_high.toLocaleString('en-US')}
+                                  </span>
+                                </span>
+                              ) : (
+                                '—'
+                              )}
                             </td>
                           </tr>
                         ))
