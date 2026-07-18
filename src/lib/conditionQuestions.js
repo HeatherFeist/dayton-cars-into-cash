@@ -1,5 +1,12 @@
 // Peddle-style condition questions, in the order the wizard asks them.
 //
+// Kept intentionally short (4 questions) so the quote is fast: the ones that
+// actually move the estimate — does it start/drive, is the drivetrain in it,
+// body condition — plus the title question (a legal gate on buying). Minor
+// factors we used to ask about (wheels, catalytic converter, interior) are
+// confirmed by phone instead; estimateOffer.js treats any missing answer as
+// no-effect, so dropping them doesn't skew the quote.
+//
 // Each question drives ONE step of the multi-step form. The `value` on every
 // option is the string estimateOffer.js matches on — keep them in sync. The
 // wording mirrors Peddle's instant-offer flow but is our own copy.
@@ -20,15 +27,6 @@ export const CONDITION_QUESTIONS = [
     ],
   },
   {
-    field: 'wheels',
-    question: 'Are all four wheels & tires intact?',
-    help: 'We need to know if it can roll onto the tow truck.',
-    options: [
-      { value: 'all_intact', label: 'Yes, all four are on and hold air' },
-      { value: 'some_missing', label: 'No, one or more is flat or missing' },
-    ],
-  },
-  {
     field: 'whole',
     question: 'Is the engine & transmission still in the vehicle?',
     help: 'Tell us if any major parts have been removed.',
@@ -36,16 +34,6 @@ export const CONDITION_QUESTIONS = [
       { value: 'whole', label: 'Yes, the vehicle is whole' },
       { value: 'missing_minor', label: 'Mostly — a few minor parts are missing' },
       { value: 'missing_engine', label: 'No, the engine or transmission is out' },
-    ],
-  },
-  {
-    field: 'catalytic',
-    question: 'Is the catalytic converter still on the vehicle?',
-    help: 'A missing converter affects the offer.',
-    options: [
-      { value: 'present', label: 'Yes, it’s still there' },
-      { value: 'missing', label: 'No, it’s been removed or cut off' },
-      { value: 'unknown', label: 'Not sure' },
     ],
   },
   {
@@ -57,16 +45,6 @@ export const CONDITION_QUESTIONS = [
       { value: 'minor', label: 'Minor dents, dings, or rust' },
       { value: 'moderate', label: 'Moderate damage' },
       { value: 'severe', label: 'Severe / wrecked / totaled' },
-    ],
-  },
-  {
-    field: 'interior',
-    question: 'How is the interior?',
-    help: 'Seats, dash, and electronics.',
-    options: [
-      { value: 'intact', label: 'Intact and complete' },
-      { value: 'damaged', label: 'Damaged or worn' },
-      { value: 'missing', label: 'Seats or major parts missing' },
     ],
   },
   {

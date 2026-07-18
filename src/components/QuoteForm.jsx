@@ -32,11 +32,8 @@ const initialState = {
   mileage: '',
   // condition answers (one per CONDITION_QUESTIONS entry)
   starts: '',
-  wheels: '',
   whole: '',
-  catalytic: '',
   bodyDamage: '',
-  interior: '',
   title: '',
   // contact
   zip: '',
