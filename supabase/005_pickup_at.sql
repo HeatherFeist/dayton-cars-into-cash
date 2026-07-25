@@ -9,3 +9,4 @@
 
 alter table dayton_cars_leads
   add column if not exists pickup_at timestamptz;
+c
