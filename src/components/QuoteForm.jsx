@@ -162,9 +162,14 @@ export default function QuoteForm() {
           free pickup. Prefer to talk now? Call{' '}
           <a href={PHONE_HREF}>{PHONE_DISPLAY}</a>.
         </p>
-        <button type="button" onClick={reset}>
-          Submit another vehicle
-        </button>
+        <div className="quote-form__success-actions">
+          <a className="quote-form__text-btn" href={PHONE_SMS_HREF}>
+            Text us now
+          </a>
+          <button type="button" onClick={reset}>
+            Submit another vehicle
+          </button>
+        </div>
       </div>
     )
   }

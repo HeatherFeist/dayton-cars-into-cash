@@ -355,8 +355,29 @@ body {
   letter-spacing: -0.5px;
 }
 
-.quote-form--success button {
+.quote-form__success-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
   margin-top: 12px;
+}
+
+.quote-form__text-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 18px;
+  border: 2px solid var(--brand);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--brand);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.quote-form--success button {
+  margin-top: 0;
   padding: 10px 18px;
   border: none;
   border-radius: 8px;
