@@ -1,6 +1,8 @@
 # Plan: Scheduling + Customer Email on "Scheduled"
 
-**Status:** Proposal for review with the client. Nothing here is built yet.
+**Status:** Phase 1 is built, using Google Calendar instead of a custom
+calendar view — see below. The customer-email part (Phase 2+) is still just a
+proposal.
 
 ## The idea (in plain terms)
 
@@ -24,15 +26,17 @@ Why this is the right call:
 
 ## What gets built (proposed)
 
-### 1. A pickup date/time on each lead
-Add a **date & time picker** to each lead row (or its detail view) in the admin
-panel, plus a `pickup_at` column in the database.
+### 1. A pickup date/time on each lead — ✅ Built
+Each lead row in the admin panel has a date/time picker (`pickup_at` column in
+the DB, see `supabase/005_pickup_at.sql`). Once a pickup time is set, a
+**"📅 Add to Calendar"** link appears next to it — it opens Google Calendar
+with a pre-filled event (customer, vehicle, phone, estimate, notes); the owner
+just clicks **Save** in their own Google Calendar.
 
-- **Recommended:** a simple native date/time picker on the lead — low effort,
-  works everywhere, no third-party calendar needed.
-- **Not recommended yet:** a full drag-and-drop calendar view. It's a lot more
-  work and isn't needed to send a good confirmation. Can be a later phase if the
-  owner wants a visual week/day calendar.
+This replaces the originally-proposed custom calendar view: no OAuth, no
+server-side Google integration, no accounts to manage. The tradeoff is it's a
+manual one-click step per lead rather than fully automatic — revisit the
+"fully automatic sync" option below if that click becomes a hassle.
 
 ### 2. "Scheduled" triggers the email
 When the owner:
@@ -100,10 +104,10 @@ groundwork for eventually moving the Pushover alert server-side too.
 
 | Phase | What | Effort | Needs from client |
 |-------|------|--------|-------------------|
-| 1 | Add `pickup_at` + date/time picker in admin; store the scheduled time | Low | Run one SQL file |
+| 1 | ✅ Done — `pickup_at` + date/time picker in admin, "Add to Calendar" link to Google Calendar | Low | Run `supabase/005_pickup_at.sql` |
 | 2 | Resend account + verified domain; Edge Function that sends the "Scheduled" email; "Confirm & notify" button | Medium | Resend signup, domain DNS records, paste API key |
 | 3 (optional) | Estimate email on submit | Low | — |
-| 4 (optional, later) | Full visual calendar view of pickups | High | — |
+| 4 (optional, later) | Fully automatic Google Calendar sync (no click) — needs Google OAuth + server-side integration | High | Google account authorization |
 
 ---
 

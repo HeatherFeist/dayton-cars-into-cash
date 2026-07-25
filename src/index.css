@@ -1071,6 +1071,38 @@ body {
   border-color: #8a8a8a;
 }
 
+.admin__pickup-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin__pickup {
+  width: 100%;
+  min-width: 170px;
+  padding: 6px 8px;
+  border: 1px solid #e2e5ea;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.admin__pickup:focus {
+  border-color: var(--teal);
+  outline: none;
+}
+
+.admin__gcal-link {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1d6fb8;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.admin__gcal-link:hover {
+  text-decoration: underline;
+}
+
 .admin__notes {
   width: 100%;
   min-width: 140px;

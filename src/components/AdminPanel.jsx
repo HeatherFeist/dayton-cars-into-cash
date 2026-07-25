@@ -17,7 +17,7 @@ const STATUS_OPTIONS = ['New', 'Contacted', 'Scheduled', 'Paid', 'Passed']
 // Columns exported to CSV (and the order). Keeps every useful field so the CSV
 // opens cleanly in Google Sheets / Excel.
 const CSV_FIELDS = [
-  'created_at', 'status', 'name', 'phone', 'email', 'zip',
+  'created_at', 'status', 'pickup_at', 'name', 'phone', 'email', 'zip',
   'year', 'make', 'model', 'trim', 'mileage',
   'starts', 'wheels', 'whole', 'catalytic', 'bodyDamage', 'interior', 'title',
   'estimate_low', 'estimate_high', 'notes',
@@ -38,6 +38,50 @@ function fmtDate(iso) {
 function dayKey(iso) {
   const d = new Date(iso)
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+}
+
+// Convert a stored ISO timestamp to the local "YYYY-MM-DDTHH:mm" value a
+// <input type="datetime-local"> expects, and back again.
+function toDatetimeLocalValue(iso) {
+  if (!iso) return ''
+  const d = new Date(iso)
+  const pad = (n) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+function fromDatetimeLocalValue(value) {
+  return value ? new Date(value).toISOString() : null
+}
+
+// A "https://calendar.google.com/calendar/render" link pre-filled with the
+// pickup details. No Google account/OAuth wiring on our end — the owner just
+// clicks it and hits Save in their own Google Calendar.
+function googleCalendarUrl(lead) {
+  if (!lead.pickup_at) return null
+  const start = new Date(lead.pickup_at)
+  const end = new Date(start.getTime() + 60 * 60 * 1000) // 1-hour pickup window
+  const toUtcStamp = (d) => d.toISOString().replace(/[-:]|\.\d{3}/g, '')
+  const vehicle = [lead.year, lead.make, lead.model].filter(Boolean).join(' ') || 'vehicle'
+
+  const details = [
+    lead.name && `Name: ${lead.name}`,
+    lead.phone && `Phone: ${lead.phone}`,
+    lead.email && `Email: ${lead.email}`,
+    lead.estimate_low != null && lead.estimate_high != null &&
+      `Estimate: $${lead.estimate_low.toLocaleString('en-US')}–$${lead.estimate_high.toLocaleString('en-US')}`,
+    lead.notes && `Notes: ${lead.notes}`,
+  ]
+    .filter(Boolean)
+    .join('\n')
+
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: `Pickup: ${vehicle} — ${lead.name || 'customer'}`,
+    dates: `${toUtcStamp(start)}/${toUtcStamp(end)}`,
+    details,
+  })
+  if (lead.zip) params.set('location', lead.zip)
+  return `https://calendar.google.com/calendar/render?${params.toString()}`
 }
 
 // Quote one CSV cell: wrap in quotes and double any inner quotes, so commas,
@@ -320,6 +364,7 @@ export default function AdminPanel({ onClose }) {
                       <tr>
                         <th>Date</th>
                         <th>Status</th>
+                        <th>Pickup</th>
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Email</th>
@@ -333,7 +378,7 @@ export default function AdminPanel({ onClose }) {
                     <tbody>
                       {filteredLeads.length === 0 ? (
                         <tr>
-                          <td colSpan={10} className="admin__muted">
+                          <td colSpan={11} className="admin__muted">
                             {leads.length === 0 ? 'No leads yet.' : 'No leads match your search.'}
                           </td>
                         </tr>
@@ -354,6 +399,27 @@ export default function AdminPanel({ onClose }) {
                                   </option>
                                 ))}
                               </select>
+                            </td>
+                            <td className="admin__pickup-cell">
+                              <input
+                                className="admin__pickup"
+                                type="datetime-local"
+                                value={toDatetimeLocalValue(lead.pickup_at)}
+                                disabled={savingId === lead.id}
+                                onChange={(e) =>
+                                  saveLeadField(lead.id, 'pickup_at', fromDatetimeLocalValue(e.target.value))
+                                }
+                              />
+                              {lead.pickup_at && (
+                                <a
+                                  className="admin__gcal-link"
+                                  href={googleCalendarUrl(lead)}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  📅 Add to Calendar
+                                </a>
+                              )}
                             </td>
                             <td>{lead.name || '—'}</td>
                             <td>{lead.phone || '—'}</td>
