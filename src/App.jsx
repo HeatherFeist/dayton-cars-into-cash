@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import QuoteForm from './components/QuoteForm'
 import AdminPanel from './components/AdminPanel'
+import { trackClick } from './lib/trackClick'
 
 const STEPS = [
   {
@@ -179,7 +180,7 @@ function App() {
             ))}
           </nav>
           <div className="header__actions">
-            <a className="header__phone" href={PHONE_HREF}>
+            <a className="header__phone" href={PHONE_HREF} onClick={() => trackClick('call', 'header')}>
               {PHONE_DISPLAY}
             </a>
             <button className="header__cta" type="button" onClick={scrollToForm}>
@@ -352,7 +353,7 @@ function App() {
         </div>
         <p className="service-area__note">
           Not sure if you're in range? Call or text{' '}
-          <a href={PHONE_HREF}>{PHONE_DISPLAY}</a> — we'll let you know right away.
+          <a href={PHONE_HREF} onClick={() => trackClick('call', 'service-area')}>{PHONE_DISPLAY}</a> — we'll let you know right away.
         </p>
       </section>
 
@@ -392,7 +393,7 @@ function App() {
       <footer className="footer">
         <p>&copy; {new Date().getFullYear()} We Pay 4 Cars. Serving Dayton, Ohio and everywhere within 60 miles.</p>
         <p>
-          Call or text <a href={PHONE_HREF}>{PHONE_DISPLAY}</a>
+          Call or text <a href={PHONE_HREF} onClick={() => trackClick('call', 'footer')}>{PHONE_DISPLAY}</a>
         </p>
       </footer>
     </div>

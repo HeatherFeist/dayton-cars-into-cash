@@ -4,6 +4,7 @@ import { estimateOffer, formatRange } from '../lib/estimateOffer'
 import { MAKES, modelsForMake, OTHER } from '../lib/vehicleData'
 import { CONDITION_QUESTIONS, NO_TITLE_VALUE } from '../lib/conditionQuestions'
 import { notifyNewLead } from '../lib/notifyLead'
+import { trackClick } from '../lib/trackClick'
 
 const CURRENT_YEAR = new Date().getFullYear()
 // Goes back to the late 1970s (junk/classic cars from that era still show up).
@@ -160,10 +161,14 @@ export default function QuoteForm() {
           This is a ballpark estimate based on what you told us. We'll call you
           shortly to confirm your <strong>final cash offer</strong> and schedule
           free pickup. Prefer to talk now? Call{' '}
-          <a href={PHONE_HREF}>{PHONE_DISPLAY}</a>.
+          <a href={PHONE_HREF} onClick={() => trackClick('call', 'quote-success')}>{PHONE_DISPLAY}</a>.
         </p>
         <div className="quote-form__success-actions">
-          <a className="quote-form__text-btn" href={PHONE_SMS_HREF}>
+          <a
+            className="quote-form__text-btn"
+            href={PHONE_SMS_HREF}
+            onClick={() => trackClick('text', 'quote-success')}
+          >
             Text us now
           </a>
           <button type="button" onClick={reset}>

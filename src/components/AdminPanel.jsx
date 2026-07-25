@@ -105,6 +105,7 @@ export default function AdminPanel({ onClose }) {
 
   const [status, setStatus] = useState('idle') // idle | loading | ready | error
   const [leads, setLeads] = useState([])
+  const [callClicks, setCallClicks] = useState([])
   const [errorMsg, setErrorMsg] = useState('')
   const [query, setQuery] = useState('')
   const [savingId, setSavingId] = useState(null) // id of the row currently saving
@@ -139,6 +140,20 @@ export default function AdminPanel({ onClose }) {
           "If this says permission denied or returns nothing, run supabase/002_wizard_columns_and_admin_read.sql to add the read policy."
       )
       setStatus('error')
+    }
+
+    // Best-effort: call/text click counts. Not fatal if this table hasn't
+    // been migrated in yet (see supabase/006_call_clicks.sql).
+    try {
+      if (!supabase) return
+      const { data, error } = await supabase
+        .from('call_clicks')
+        .select('kind, created_at')
+        .order('created_at', { ascending: false })
+      if (error) throw error
+      setCallClicks(data || [])
+    } catch (err) {
+      console.error('Failed to load call_clicks (has supabase/006_call_clicks.sql been run?):', err)
     }
   }
 
@@ -253,6 +268,22 @@ export default function AdminPanel({ onClose }) {
     return leads.filter((l) => dayKey(l.created_at) === today).length
   }, [leads])
 
+  // Call/text link clicks — a real, countable proxy for call volume (see
+  // supabase/006_call_clicks.sql for why this is a click count, not a
+  // guarantee someone actually called).
+  const callClickStats = useMemo(() => {
+    const today = dayKey(new Date().toISOString())
+    let calls = 0
+    let texts = 0
+    let todayTotal = 0
+    for (const c of callClicks) {
+      if (c.kind === 'text') texts += 1
+      else calls += 1
+      if (dayKey(c.created_at) === today) todayTotal += 1
+    }
+    return { calls, texts, total: calls + texts, today: todayTotal }
+  }, [callClicks])
+
   return (
     <div className="admin" role="dialog" aria-modal="true" aria-label="Admin panel">
       <div className="admin__box">
@@ -311,6 +342,14 @@ export default function AdminPanel({ onClose }) {
                   <div className="admin__stat">
                     <strong>{perZip.length}</strong>
                     <span>Zip codes</span>
+                  </div>
+                  <div className="admin__stat" title="Phone/text link clicks (call + SMS buttons), all time">
+                    <strong>{callClickStats.total}</strong>
+                    <span>Calls/texts clicked</span>
+                  </div>
+                  <div className="admin__stat" title="Phone/text link clicks today">
+                    <strong>{callClickStats.today}</strong>
+                    <span>Calls/texts today</span>
                   </div>
                 </div>
 
