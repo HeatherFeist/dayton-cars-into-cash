@@ -35,7 +35,7 @@ live spokesperson. Target length: **~40 seconds** (≈95–110 spoken words).
 
 ## Option B — 25-second short cut (for social / ads)
 
-> Old car sitting in your driveway? Dayton Cars into Cash pays cash for it —
+> Old car sitting in your driveway? We Pay 4 Cars pays cash for it —
 > any condition, running or not.
 >
 > Tell us about your car, get an instant offer, and we'll tow it free and

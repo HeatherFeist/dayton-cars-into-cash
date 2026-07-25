@@ -163,8 +163,8 @@ function App() {
       {adminOpen && <AdminPanel onClose={() => setAdminOpen(false)} />}
       <header className="header">
         <div className="header__inner">
-          <span className="logo" onClick={handleLogoTap} title="Dayton Cars into Cash">
-            Dayton <span className="logo__accent">Cars into Cash</span>
+          <span className="logo" onClick={handleLogoTap} title="We Pay 4 Cars">
+            We Pay <span className="logo__accent">4 Cars</span>
           </span>
           <nav className="header__nav" aria-label="Primary">
             {NAV_LINKS.map((link) => (
@@ -193,7 +193,7 @@ function App() {
         <div className="intro-video__inner">
           <h2 className="intro-video__title">See How It Works</h2>
           <p className="intro-video__sub">
-            A quick look at how Dayton Cars into Cash turns your junk car into
+            A quick look at how We Pay 4 Cars turns your junk car into
             cash — in under a minute.
           </p>
           {/*
@@ -337,7 +337,7 @@ function App() {
         <div className="service-area__body">
           <div className="service-area__map">
             <iframe
-              title="Dayton Cars into Cash service area map"
+              title="We Pay 4 Cars service area map"
               src="https://www.google.com/maps?q=Dayton,+OH&z=8&output=embed"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -390,7 +390,7 @@ function App() {
       </section>
 
       <footer className="footer">
-        <p>&copy; {new Date().getFullYear()} Dayton Cars into Cash. Serving Dayton, Ohio and everywhere within 60 miles.</p>
+        <p>&copy; {new Date().getFullYear()} We Pay 4 Cars. Serving Dayton, Ohio and everywhere within 60 miles.</p>
         <p>
           Call or text <a href={PHONE_HREF}>{PHONE_DISPLAY}</a>
         </p>

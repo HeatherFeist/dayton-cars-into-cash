@@ -5,7 +5,7 @@ you open it with a secret gesture.
 
 ## How to open it
 
-1. On the live site, **tap/click the "Dayton Cars into Cash" logo (top-left)
+1. On the live site, **tap/click the "We Pay 4 Cars" logo (top-left)
    6 times quickly** (within about 2 seconds).
 2. A password box appears. Enter the password: **`Admin`**
 3. You'll see the Leads Dashboard: total leads, today's count, a per-day

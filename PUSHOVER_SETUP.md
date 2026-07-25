@@ -3,7 +3,7 @@
 When someone completes the quote form, the owner's phone gets an instant push
 notification with the customer's details and their quote — e.g.:
 
-> **New lead — Dayton Cars into Cash**
+> **New lead — We Pay 4 Cars**
 > 2015 Honda Civic
 > Quoted ~$438 ($375–$500)
 > Name: Jane Doe
@@ -21,7 +21,7 @@ this — it has no way for a website to trigger it — so we use Pushover instea
 2. On https://pushover.net, copy the account's **User Key** (shown on the
    dashboard).
 3. Create an application: **Apps & Plugins → Create a New Application/API Token**
-   (name it e.g. "Dayton Cars Leads"). Copy the **API Token/Key** it gives you.
+   (name it e.g. "We Pay 4 Cars Leads"). Copy the **API Token/Key** it gives you.
 4. Put both values into the site's environment:
    - **Local dev:** add to `.env`:
      ```

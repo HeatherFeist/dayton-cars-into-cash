@@ -42,7 +42,7 @@ When the owner:
 
 ...the customer gets an email like:
 
-> **Your pickup is scheduled — Dayton Cars into Cash**
+> **Your pickup is scheduled — We Pay 4 Cars**
 > Hi [Name], your 2015 Honda Civic is scheduled for pickup on
 > **Tue, July 22 at 10:00 AM**. Our driver will pay you [estimate] in cash or
 > check at pickup. Questions? Call (937) 296-6755.
@@ -67,9 +67,9 @@ A website can't send email on its own. To send customer emails we need:
    Free tier ~3,000 emails/month, simple API. (Plenty for this volume.)
 
 2. **A verified sending domain (strongly recommended).**
-   So the email comes from e.g. `offers@daytoncarsintocash.com` and lands in the
+   So the email comes from e.g. `offers@wepay4cars.com` and lands in the
    inbox, not spam. This needs:
-   - The business to own a domain (do they have `daytoncarsintocash.com` or
+   - The business to own a domain (do they have `wepay4cars.com` or
      similar?).
    - Adding a couple of DNS records Resend provides (SPF/DKIM). ~15 min, one
      time. Without this, email still sends but from a generic address and is
@@ -109,7 +109,7 @@ groundwork for eventually moving the Pushover alert server-side too.
 
 ## Open questions for the client
 
-1. **Do they own a domain** (e.g. daytoncarsintocash.com)? Needed for
+1. **Do they own a domain** (e.g. wepay4cars.com)? Needed for
    good-looking, inbox-landing email. If not, do they want to get one?
 2. **Should the "Scheduled" email include the estimate**, or just the pickup
    date and logistics?

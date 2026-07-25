@@ -50,7 +50,7 @@ export async function notifyNewLead(lead, range) {
     const body = new URLSearchParams({
       token: APP_TOKEN,
       user: USER_KEY,
-      title: 'New lead — Dayton Cars into Cash',
+      title: 'New lead — We Pay 4 Cars',
       message: buildMessage(lead, range),
       priority: '1', // high priority, bypasses quiet hours
     })
