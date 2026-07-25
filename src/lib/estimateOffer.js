@@ -46,16 +46,20 @@ const CATALYTIC_CONVERTER_VALUE = 150
 // before lighter ones.
 const BODY_TYPE_WEIGHT_TONS = [
   // Heavy-duty & full-size pickups (3/4- and 1-ton). "ram 2500/3500" as a
-  // standalone Ram make reads as "Ram 2500", so match that too.
-  { test: /f-?250|f-?350|silverado ?2500|silverado ?3500|ram ?2500|ram ?3500|sierra ?2500|sierra ?3500|super ?duty|promaster/i, tons: 3.2 },
-  // Light-duty pickups (incl. standalone Ram 1500, and newer midsize trucks)
-  { test: /truck|pickup|silverado|sierra|f-?150|\bram\b|1500|tundra|tacoma|ranger|maverick|frontier|colorado|ridgeline|canyon|gladiator|santa cruz|titan/i, tons: 2.5 },
-  // Full-size SUVs & vans (incl. newer big SUVs)
-  { test: /suburban|tahoe|yukon|expedition|sequoia|escalade|denali|armada|navigator|wagoneer|palisade|telluride|grand wagoneer|gx|lx|qx80|gls/i, tons: 2.9 },
-  // Minivans / cargo vans
-  { test: /van|caravan|odyssey|sienna|pacifica|carnival|sedona|transit|express|savana|town ?&? ?country|voyager/i, tons: 2.25 },
-  // Midsize/compact SUVs & crossovers (incl. newer nameplates)
-  { test: /suv|explorer|pilot|passport|highlander|4runner|traverse|ascent|equinox|rav4|cr-?v|rogue|escape|bronco|blazer|durango|edge|cherokee|wrangler|forester|outback|crosstrek|cx-?5|cx-?9|cx-?90|sorento|santa fe|tucson|sportage|seltos|kicks|trailblazer|trax|kona|venue|atlas|tiguan|4motion|q5|q7|x3|x5|glc|gle|rx|nx|mdx|rdx/i, tons: 2.0 },
+  // standalone Ram make reads as "Ram 2500", so match that too. Includes
+  // classic-era 3/4-ton designations (C/K 2500-3500, D250/D350).
+  { test: /f-?250|f-?350|silverado ?2500|silverado ?3500|ram ?2500|ram ?3500|sierra ?2500|sierra ?3500|super ?duty|promaster|\bk ?2500\b|\bk ?3500\b|\bc ?2500\b|\bc ?3500\b|d250|d350/i, tons: 3.2 },
+  // Light-duty pickups (incl. standalone Ram 1500, newer midsize trucks, and
+  // classic-era pickups/half-tons).
+  { test: /truck|pickup|silverado|sierra|f-?150|f-?100|\bram\b|1500|tundra|tacoma|ranger|maverick|frontier|colorado|ridgeline|canyon|gladiator|santa cruz|titan|\bc-?10\b|\bc-?1500\b|\bk-?10\b|\bk-?1500\b|d150|caballero|el camino|scout/i, tons: 2.5 },
+  // Full-size SUVs & vans (incl. newer big SUVs and classic-era full-size
+  // 4x4s / travel-alls).
+  { test: /suburban|tahoe|yukon|expedition|sequoia|escalade|denali|armada|navigator|wagoneer|palisade|telluride|grand wagoneer|gx|lx|qx80|gls|ramcharger|travelall|bronco(?! sport)/i, tons: 2.9 },
+  // Minivans / cargo vans (incl. classic-era full-size vans)
+  { test: /van|caravan|odyssey|sienna|pacifica|carnival|sedona|transit|express|savana|town ?&? ?country|voyager|safari|astro/i, tons: 2.25 },
+  // Midsize/compact SUVs & crossovers (incl. newer nameplates and classic-era
+  // compact 4x4s/SUVs).
+  { test: /suv|explorer|pilot|passport|highlander|4runner|traverse|ascent|equinox|rav4|cr-?v|rogue|escape|bronco sport|blazer|durango|edge|cherokee|wrangler|forester|outback|crosstrek|cx-?5|cx-?9|cx-?90|sorento|santa fe|tucson|sportage|seltos|kicks|trailblazer|trax|kona|venue|atlas|tiguan|4motion|q5|q7|x3|x5|glc|gle|rx|nx|mdx|rdx|trooper|rodeo|jimmy|samurai|sidekick|grand vitara|cj-?5|cj-?7/i, tons: 2.0 },
   // Sedans / coupes / everything else
   { test: /.*/, tons: 1.7 },
 ]

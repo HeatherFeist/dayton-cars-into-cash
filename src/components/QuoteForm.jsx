@@ -6,10 +6,13 @@ import { CONDITION_QUESTIONS, NO_TITLE_VALUE } from '../lib/conditionQuestions'
 import { notifyNewLead } from '../lib/notifyLead'
 
 const CURRENT_YEAR = new Date().getFullYear()
-const YEARS = Array.from({ length: 40 }, (_, i) => CURRENT_YEAR + 1 - i)
+// Goes back to the late 1970s (junk/classic cars from that era still show up).
+const OLDEST_YEAR = 1978
+const YEARS = Array.from({ length: CURRENT_YEAR + 1 - OLDEST_YEAR }, (_, i) => CURRENT_YEAR + 1 - i)
 
 const PHONE_DISPLAY = '(937) 296-6755'
 const PHONE_HREF = 'tel:19372966755'
+const PHONE_SMS_HREF = 'sms:19372966755'
 
 // One entry per screen of the wizard, in order. The vehicle basics and the
 // contact details are custom screens; every condition question in between is
