@@ -67,23 +67,6 @@ const SERVICE_CITIES = [
   'Urbana',
 ]
 
-// Placeholder testimonials — swap for real, permissioned customer reviews
-// before launch. Do not attribute quotes to real people without consent.
-const REVIEWS = [
-  {
-    quote: 'Had an offer in minutes and they towed my old truck the next morning. Cash in hand, no hassle.',
-    detail: 'Replace with a real customer review',
-  },
-  {
-    quote: 'My car had no title and would not start. Still got a fair price and free pickup. Easy.',
-    detail: 'Replace with a real customer review',
-  },
-  {
-    quote: 'The offer they gave me online was the exact amount I got paid. No lowballing at pickup.',
-    detail: 'Replace with a real customer review',
-  },
-]
-
 const FAQS = [
   {
     q: 'How much is my junk car worth?',
@@ -133,7 +116,6 @@ function scrollToId(e, id) {
 // map to a real section on the page; add more here as pages/sections exist.
 const NAV_LINKS = [
   { id: 'how-it-works', label: 'How It Works' },
-  { id: 'reviews', label: 'Reviews' },
 ]
 
 // How many logo taps, within this window, reveal the hidden admin panel.
@@ -306,24 +288,6 @@ function App() {
               <h3>{reason.title}</h3>
               <p>{reason.body}</p>
             </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="reviews" id="reviews">
-        <h2>What Our Customers Say</h2>
-        <p className="section-sub">
-          Placeholder reviews — replace with your real customer testimonials.
-        </p>
-        <div className="reviews__grid">
-          {REVIEWS.map((review, i) => (
-            <figure className="review-card" key={i}>
-              <div className="review-card__stars" aria-hidden="true">
-                ★★★★★
-              </div>
-              <blockquote>{review.quote}</blockquote>
-              <figcaption>{review.detail}</figcaption>
-            </figure>
           ))}
         </div>
       </section>
