@@ -1068,6 +1068,26 @@ body {
   font-size: 0.88rem;
 }
 
+.directory-card--empty {
+  opacity: 0.72;
+}
+
+.directory-grid--on-dark {
+  margin-top: 22px;
+}
+
+.directory-crumb {
+  margin: 0 0 12px;
+  color: #eaf3ec;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.directory-crumb a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
 .directory-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(10, 23, 51, 0.12);

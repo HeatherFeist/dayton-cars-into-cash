@@ -23,7 +23,9 @@ export function sitePlugin() {
         const [path, query] = String(req.url || '').split('?')
         const target = rewritePath(path, sub)
         if (target) req.url = `${target}${query ? `?${query}` : ''}`
-        else if (/^\/areas\/[a-z0-9-]+$/.test(path)) req.url = `${path}/${query ? `?${query}` : ''}`
+        else if (!path.includes('.') && path.length > 1 && !path.endsWith('/')) {
+          req.url = `${path}/${query ? `?${query}` : ''}`
+        }
         next()
       })
     },

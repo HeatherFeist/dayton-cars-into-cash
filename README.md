@@ -98,7 +98,7 @@ The site will not invent a review count, a star rating, or a price. When you hav
 
 ## The city directory
 
-`wepay4cars.com` is the front door. Each yard is one link, and that link opens their own website, such as `https://sandys.wepay4cars.com`. Searching for a city still finds the yard that serves it. The click always goes to that yard's address, not to a page on the main site.
+`wepay4cars.com` starts with all 50 states. Open a state, such as `wepay4cars.com/ohio`, and you get the cities where a yard actually picks up. Open a city, such as `wepay4cars.com/ohio/dayton`, and you get each yard that serves it. Those links leave the main site and open that yard’s own website, such as `https://sandys.wepay4cars.com/areas/denver`. States with nobody listed yet still appear, and they say so. Cities are never made up.
 
 Each yard is one block in `affiliates.config.js`. The sample yard is already there, pulled in from `site.config.js`. To add a yard, copy the sample details into a new block, set `subdomain` from the business name, and add the block to the list. Do not type a phone number or a city the yard does not really serve.
 

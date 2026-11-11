@@ -2,7 +2,8 @@ import network from '../network.config.js'
 import { setActiveSite } from '../src/lib/activeSite.js'
 import { homeDescription } from '../src/lib/content.js'
 import { netlifyFormName } from '../src/lib/submitLead.js'
-import { directoryMeta, pageMeta, sitemapPaths } from '../src/lib/seo.js'
+import { pageMeta, sitemapPaths } from '../src/lib/seo.js'
+import { directoryPageMeta } from '../src/lib/yards.js'
 import site, { siteOrigin, themeCss } from '../src/lib/site.js'
 import { resolveRequest } from '../src/lib/yards.js'
 
@@ -52,9 +53,10 @@ export function robotsTxt() {
   return lines.join('\n')
 }
 
-export function sitemapXml() {
+export function sitemapXml(paths) {
   const today = new Date().toISOString().slice(0, 10)
-  const urls = sitemapPaths()
+  const list = paths || sitemapPaths()
+  const urls = list
     .map(({ loc, path }) => {
       const priority = path === '/' ? '1.0' : '0.8'
       return `  <url><loc>${escapeHtml(loc)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>${priority}</priority></url>`
@@ -112,6 +114,6 @@ export function devHtml(html, url = '/', host = '') {
   const requestUrl = String(url || '/').split('?')[0]
   const { site: resolved, path } = resolveRequest(host, requestUrl)
   setActiveSite(resolved)
-  const meta = resolved.kind === 'directory' ? directoryMeta() : pageMeta(path)
+  const meta = resolved.kind === 'directory' ? directoryPageMeta(path) : pageMeta(path)
   return fillTemplate(html, meta, { appHtml: '' })
 }

@@ -8,7 +8,8 @@ import { citySlug } from '../src/lib/cityContent.js'
 import { isSubdomainLabel } from '../src/lib/hostRouter.js'
 import { faviconSvg, fillTemplate, manifestJson, robotsTxt, sitemapXml } from './siteFiles.mjs'
 import { serviceAreaCities, themeCss } from '../src/lib/site.js'
-import { directorySite } from '../src/lib/yards.js'
+import network from '../network.config.js'
+import { directoryRoutes, directorySite } from '../src/lib/yards.js'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dist = path.join(root, 'dist')
@@ -82,12 +83,24 @@ function writePage(file, site, route) {
 }
 
 const directory = directorySite()
-writePage(path.join(dist, 'index.html'), directory, '/')
+const directoryPaths = directoryRoutes()
+for (const route of directoryPaths) {
+  const file = route === '/' ? path.join(dist, 'index.html') : path.join(dist, route.slice(1), 'index.html')
+  writePage(file, directory, route)
+}
 setActiveSite(directory)
 fs.writeFileSync(path.join(dist, 'favicon.svg'), faviconSvg(directory.colors))
 fs.writeFileSync(path.join(dist, 'manifest.webmanifest'), manifestJson())
 fs.writeFileSync(path.join(dist, 'robots.txt'), robotsTxt())
-fs.writeFileSync(path.join(dist, 'sitemap.xml'), sitemapXml())
+fs.writeFileSync(
+  path.join(dist, 'sitemap.xml'),
+  sitemapXml(
+    directoryPaths.map((route) => ({
+      path: route,
+      loc: `https://${network.domain}${route === '/' ? '/' : route}`,
+    })),
+  ),
+)
 
 for (const yard of affiliates) {
   setActiveSite(yard)

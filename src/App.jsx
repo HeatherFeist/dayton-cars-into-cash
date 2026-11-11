@@ -13,7 +13,9 @@ export default function App({ ssrPath = '/' }) {
   const nav = usePath(ssrPath)
   const current = getActiveSite()
   if (current?.kind === 'missing') return <MissingYard subdomain={current.subdomain} />
-  if (current?.kind === 'directory') return <DirectoryPage />
+  if (current?.kind === 'directory') {
+    return <DirectoryPage path={normalizePath(nav.path || ssrPath)} />
+  }
 
   const path = normalizePath(nav.path || ssrPath)
   const city = cityFromPath(path)
