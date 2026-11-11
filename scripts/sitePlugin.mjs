@@ -1,4 +1,9 @@
+import { setActiveSite } from '../src/lib/activeSite.js'
+import { rewritePath, subdomainFromHost } from '../src/lib/hostRouter.js'
+import { resolveRequest } from '../src/lib/yards.js'
 import { faviconSvg, manifestJson, robotsTxt, sitemapXml, devHtml } from './siteFiles.mjs'
+
+let devHost = ''
 
 export function sitePlugin() {
   return {
@@ -8,23 +13,29 @@ export function sitePlugin() {
       handler(html, ctx) {
         if (!ctx.server) return html
         const url = ctx.originalUrl || '/'
-        return devHtml(html, url)
+        return devHtml(html, url, devHost)
       },
     },
     configurePreviewServer(server) {
-      // Folder pages live at /areas/city/index.html. Preview should serve them
-      // for /areas/city as well, not fall back to the home page.
       server.middlewares.use((req, _res, next) => {
+        const host = req.headers.host || ''
+        const sub = subdomainFromHost(host)
         const [path, query] = String(req.url || '').split('?')
-        if (/^\/areas\/[a-z0-9-]+$/.test(path)) {
-          req.url = `${path}/${query ? `?${query}` : ''}`
-        }
+        const target = rewritePath(path, sub)
+        if (target) req.url = `${target}${query ? `?${query}` : ''}`
+        else if (/^\/areas\/[a-z0-9-]+$/.test(path)) req.url = `${path}/${query ? `?${query}` : ''}`
         next()
       })
     },
     configureServer(server) {
+      server.middlewares.use((req, _res, next) => {
+        devHost = req.headers.host || ''
+        next()
+      })
       server.middlewares.use((req, res, next) => {
         const url = req.url?.split('?')[0]
+        const { site: resolved } = resolveRequest(req.headers.host || '', url || '/')
+        setActiveSite(resolved)
         if (url === '/favicon.svg') {
           res.setHeader('Content-Type', 'image/svg+xml')
           res.end(faviconSvg())

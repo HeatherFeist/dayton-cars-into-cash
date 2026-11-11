@@ -1,4 +1,19 @@
-import site from '../../site.config.js'
+import { getActiveSite } from './activeSite.js'
+import network from '../../network.config.js'
+
+const site = new Proxy(
+  {},
+  {
+    get(_target, prop) {
+      const current = getActiveSite()
+      if (!current) {
+        throw new Error('No yard is selected yet.')
+      }
+      const value = current[prop]
+      return typeof value === 'function' ? value.bind(current) : value
+    },
+  },
+)
 
 export default site
 
@@ -53,9 +68,13 @@ export function publicHttpUrl(value) {
 }
 
 export function siteOrigin() {
-  const base = String(site.siteUrl || '').trim().replace(/\/$/, '')
-  if (!/^https?:\/\/.+/i.test(base)) return ''
-  return base
+  const current = getActiveSite()
+  if (!current) return ''
+  const custom = String(current.siteUrl || '').trim().replace(/\/$/, '')
+  if (/^https?:\/\/.+/i.test(custom) && !/example\.com/i.test(custom)) return custom
+  if (current.kind === 'directory') return `https://${network.domain}`
+  if (current.subdomain) return `https://${current.subdomain}.${network.domain}`
+  return ''
 }
 
 export function absoluteUrl(path = '/') {

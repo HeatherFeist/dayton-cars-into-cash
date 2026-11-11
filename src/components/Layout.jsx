@@ -5,6 +5,7 @@ import { publicHttpUrl } from '../lib/site'
 import { pageMeta } from '../lib/seo'
 import { trackCall } from '../lib/track'
 import { useNavigate } from './nav'
+import network from '../../network.config.js'
 
 function Logo() {
   const { navigate } = useNavigate()
@@ -134,6 +135,11 @@ export default function Layout({ path, children }) {
               </>
             )}
           </p>
+          {network.affiliateLine ? (
+            <p>
+              <a href={`https://${network.domain}/`}>{network.affiliateLine}</a>
+            </p>
+          ) : null}
           {(socials.length > 0 || reviewUrl || site.licenseLine) && (
             <p className="footer__links">
               {socials.map((item) => (

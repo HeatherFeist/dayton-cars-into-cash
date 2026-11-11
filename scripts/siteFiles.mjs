@@ -1,8 +1,10 @@
-import site from '../site.config.js'
+import network from '../network.config.js'
+import { setActiveSite } from '../src/lib/activeSite.js'
 import { homeDescription } from '../src/lib/content.js'
 import { netlifyFormName } from '../src/lib/submitLead.js'
-import { pageMeta, sitemapPaths } from '../src/lib/seo.js'
-import { siteOrigin, themeCss } from '../src/lib/site.js'
+import { directoryMeta, pageMeta, sitemapPaths } from '../src/lib/seo.js'
+import site, { siteOrigin, themeCss } from '../src/lib/site.js'
+import { resolveRequest } from '../src/lib/yards.js'
 
 const HEX = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/
 
@@ -29,7 +31,7 @@ export function manifestJson() {
     {
       name: site.businessName,
       short_name: site.businessName.slice(0, 18),
-      description: homeDescription(),
+      description: site.kind === 'directory' ? network.tagline : homeDescription(),
       start_url: '/',
       scope: '/',
       display: 'standalone',
@@ -43,7 +45,9 @@ export function manifestJson() {
 }
 
 export function robotsTxt() {
-  const lines = ['User-agent: *', 'Allow: /', '']
+  const lines = ['User-agent: *', 'Allow: /']
+  if (site.kind === 'directory') lines.push('Disallow: /_aff/')
+  lines.push('')
   if (siteOrigin()) lines.push(`Sitemap: ${siteOrigin()}/sitemap.xml`, '')
   return lines.join('\n')
 }
@@ -98,12 +102,16 @@ export function fillTemplate(html, meta, { appHtml = '' } = {}) {
   out = replaceToken(out, '__JSONLD__', jsonLd)
   out = replaceToken(out, '__ANALYTICS__', analyticsSnippets())
   out = replaceToken(out, '__PATH__', escapeHtml(meta.path))
+  out = replaceToken(out, '__AFFILIATE__', escapeHtml(meta.affiliate || ''))
   out = replaceToken(out, '__APP__', appHtml)
   out = replaceToken(out, '__NETLIFY_FORM__', netlifyFormHtml())
   return out
 }
 
-export function devHtml(html, url = '/') {
-  const path = String(url || '/').split('?')[0]
-  return fillTemplate(html, pageMeta(path), { appHtml: '' })
+export function devHtml(html, url = '/', host = '') {
+  const requestUrl = String(url || '/').split('?')[0]
+  const { site: resolved, path } = resolveRequest(host, requestUrl)
+  setActiveSite(resolved)
+  const meta = resolved.kind === 'directory' ? directoryMeta() : pageMeta(path)
+  return fillTemplate(html, meta, { appHtml: '' })
 }

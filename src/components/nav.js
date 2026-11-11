@@ -1,5 +1,18 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { publicPathFromAff } from '../lib/hostRouter'
 import { normalizePath } from '../lib/seo'
+
+function browserPath() {
+  return normalizePath(publicPathFromAff(window.location.pathname) ?? window.location.pathname)
+}
+
+function withAffPrefix(pathname) {
+  if (typeof window === 'undefined') return pathname
+  const prefix = window.location.pathname.match(/^(\/_aff\/[a-z0-9-]+)/)
+  if (!prefix || pathname.startsWith('/_aff/')) return pathname
+  if (pathname === '/') return `${prefix[1]}/`
+  return `${prefix[1]}${pathname}`
+}
 
 export const NavContext = createContext({
   navigate() {},
@@ -11,11 +24,11 @@ export function useNavigate() {
 
 export function usePath(ssrPath) {
   const [path, setPath] = useState(() =>
-    typeof window === 'undefined' ? normalizePath(ssrPath) : normalizePath(window.location.pathname),
+    typeof window === 'undefined' ? normalizePath(ssrPath) : browserPath(),
   )
 
   useEffect(() => {
-    const onPop = () => setPath(normalizePath(window.location.pathname))
+    const onPop = () => setPath(browserPath())
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
   }, [])
@@ -35,8 +48,9 @@ export function usePath(ssrPath) {
     const url = new URL(href, window.location.origin)
     if (url.origin !== window.location.origin) return
     event.preventDefault()
-    const next = normalizePath(url.pathname)
-    window.history.pushState({}, '', `${url.pathname}${url.search}${url.hash}`)
+    const next = normalizePath(publicPathFromAff(url.pathname) ?? url.pathname)
+    const visible = withAffPrefix(url.pathname)
+    window.history.pushState({}, '', `${visible}${url.search}${url.hash}`)
     setPath(next)
     if (!url.hash) window.scrollTo(0, 0)
   }

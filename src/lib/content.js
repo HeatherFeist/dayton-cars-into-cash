@@ -1,7 +1,7 @@
-import site from '../../site.config.js'
-import { vehiclePhrase } from './site.js'
+import site, { vehiclePhrase } from './site.js'
 
-export const STEPS = [
+export function steps() {
+  return [
   {
     title: 'Tell Us About Your Car',
     body: 'Enter your year, make, model, and condition. It takes less than two minutes.',
@@ -16,7 +16,8 @@ export const STEPS = [
       ? `We tow it${site.claims.freeTowing ? ' free' : ''} and hand you ${site.claims.paymentMethods} on the spot${site.claims.sameDayPickupOften ? ' — often same day' : ''}.`
       : 'We schedule a pickup time that works for you and explain payment before we arrive.',
   },
-]
+  ]
+}
 
 export function heroPoints() {
   const points = ['Request a cash offer online']

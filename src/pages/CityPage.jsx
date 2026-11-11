@@ -3,7 +3,7 @@ import OfferForm from '../components/OfferForm'
 import { useNavigate } from '../components/nav'
 import site, { listAnd, serviceAreaCities, telHref } from '../lib/site'
 import { cityPageContent, cityPath } from '../lib/cityContent'
-import { STEPS, buildFaqs, cityMapQuery, heroPoints } from '../lib/content'
+import { steps, buildFaqs, cityMapQuery, heroPoints } from '../lib/content'
 import { trackCall } from '../lib/track'
 
 export default function CityPage({ city }) {
@@ -57,7 +57,7 @@ export default function CityPage({ city }) {
           ))}
           <h2>How pickup works in {city}</h2>
           <div className="steps__grid">
-            {STEPS.map((step, i) => (
+            {steps().map((step, i) => (
               <div className="step-card" key={step.title}>
                 <span className="step-card__num">Step {i + 1}</span>
                 <h3>{step.title}</h3>

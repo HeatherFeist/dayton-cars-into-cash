@@ -20,7 +20,7 @@ Change these before you show the site to customers:
 - **Email**, if you want one shown and used as a backup
 - **City, state, and how many miles** you will drive for a pickup
 - **The list of cities** you actually serve. One page is created for each city. Delete cities you do not serve, and add the ones you do. One city per line, inside quotes.
-- **Your real website address** (`siteUrl`). The sample says `https://example.com`. Change it to the address you bought, with no slash at the end.
+- **Subdomain.** This is the yard's web address. Use the business name in lowercase with spaces and apostrophes removed. Sandy's Towing becomes `sandys`. Jim's Towing becomes `jimstowing`. The yard is then at `sandys.wepay4cars.com`. The sample name is We Pay 4 Cars, so the sample address is `wepay4cars.wepay4cars.com`.
 - **Colors.** `brand` is the dark header color. `accent` is the gold on the buttons. Change those two and the whole site recolors.
 
 Leave a line as `''` (two quotes with nothing between them) when you do not have that item yet. The site hides it. Do not type a street address, hours, license number, star rating, or review count unless it is real and you are happy to publish it.
@@ -87,7 +87,7 @@ After it is live, open the home page and one city page on your phone. Tap the ca
 ## Before you advertise
 
 - [ ] Business name, phone, and text number are yours
-- [ ] `siteUrl` is your real address, not `example.com`
+- [ ] `subdomain` is the yard's real business name, with no spaces
 - [ ] The city list is only places you will pick up
 - [ ] Every promise on the page is true (free towing, same-day pickup, how you pay)
 - [ ] The sample video is replaced or hidden
@@ -95,6 +95,18 @@ After it is live, open the home page and one city page on your phone. Tap the ca
 - [ ] Address, hours, Google review link, and review numbers are still blank, or they are real
 
 The site will not invent a review count, a star rating, or a price. When you have real Google numbers, paste them into `googleRating`, `googleReviewCount`, and `googleReviewUrl`. Until then, that spot stays a plain sentence.
+
+## The city directory
+
+`wepay4cars.com` is the front door. Each yard is one link, and that link opens their own website, such as `https://sandys.wepay4cars.com`. Searching for a city still finds the yard that serves it. The click always goes to that yard's address, not to a page on the main site.
+
+Each yard is one block in `affiliates.config.js`. The sample yard is already there, pulled in from `site.config.js`. To add a yard, copy the sample details into a new block, set `subdomain` from the business name, and add the block to the list. Do not type a phone number or a city the yard does not really serve.
+
+Their pages stay on their subdomain: `sandys.wepay4cars.com` is Sandy's home page, and `sandys.wepay4cars.com/areas/denver` is one town she picks up in.
+
+Before the subdomains work in a browser, the domain settings for `wepay4cars.com` need one extra record so every name in front of the domain (the `*` record) points at the same site as `wepay4cars.com`. The person who handles the domain can add that. Until then, a yard can still be opened at `wepay4cars.com/_aff/sandys/`.
+
+Leave `siteUrl` as `https://example.com` unless the yard has bought a completely separate domain. The subdomain address is used on its own.
 
 ## What the site builds for you
 

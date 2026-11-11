@@ -1,4 +1,4 @@
-import site from '../../site.config.js'
+import site from './site.js'
 
 function gaId() {
   const id = String(site.analytics?.googleAnalyticsId || '').trim()

@@ -4,7 +4,7 @@ import { useNavigate } from '../components/nav'
 import site, { hasReviewStats, serviceAreaCities, telHref } from '../lib/site'
 import { cityPath } from '../lib/cityContent'
 import {
-  STEPS,
+  steps,
   buildFaqs,
   heroPoints,
   mapQuery,
@@ -93,7 +93,7 @@ export default function HomePage() {
         <h2>How It Works</h2>
         <p className="section-sub">Three simple steps from junk car to cash.</p>
         <div className="steps__grid">
-          {STEPS.map((step, i) => (
+          {steps().map((step, i) => (
             <div className="step-card" key={step.title}>
               <span className="step-card__num">Step {i + 1}</span>
               <h3>{step.title}</h3>

@@ -1,4 +1,4 @@
-import site from '../../site.config.js'
+import site from './site.js'
 import { isBlank, publicEmail, publicHttpUrl, smsHref } from './site.js'
 
 export function leadFields(data) {

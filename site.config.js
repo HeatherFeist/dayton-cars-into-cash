@@ -18,6 +18,13 @@ const site = {
   // The name customers see in the header, the page title, and the footer.
   businessName: 'We Pay 4 Cars',
 
+  // The yard's address on wepay4cars.com. Use the business name in
+  // lowercase with spaces and apostrophes removed.
+  // Sandy's Towing → sandys    Jim's Towing → jimstowing
+  // The main site (wepay4cars.com) is the city directory. This yard is
+  // https://wepay4cars.wepay4cars.com because the sample name is We Pay 4 Cars.
+  subdomain: 'wepay4cars',
+
   // Text logo only: the part of the name to draw in the gold accent color.
   // Ignored when logoPath is set. Must be an exact piece of businessName.
   logoAccent: '4 Cars',
@@ -109,9 +116,8 @@ const site = {
     'Urbana',
   ],
 
-  // Your real website address, with https, and no slash at the end.
-  // Used for the sitemap and the links search engines read.
-  // The sample uses example.com — change it before you launch.
+  // Leave this as example.com to use https://SUBDOMAIN.wepay4cars.com.
+  // Set a full https address only when this yard has its own domain.
   siteUrl: 'https://example.com',
 
   // Brand colors. These recolor the whole site: header, buttons, links.

@@ -5,8 +5,12 @@
 [build.environment]
   NODE_VERSION = "20"
 
-# Single-page app: serve index.html for any route so client-side
-# navigation and page refreshes don't 404.
+# Yard subdomains are rewritten to /_aff/<yard>/ by the edge function.
+# This fallback only covers unknown paths on the city directory.
+[[edge_functions]]
+  function = "affiliate-router"
+  path = "/*"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

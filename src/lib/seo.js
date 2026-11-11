@@ -1,4 +1,6 @@
-import site from '../../site.config.js'
+import network from '../../network.config.js'
+import site from './site.js'
+import { getActiveSite } from './activeSite.js'
 import { cityFromPath, cityPageContent, cityPath } from './cityContent.js'
 import { homeDescription } from './content.js'
 import {
@@ -158,12 +160,57 @@ function notFoundMeta(path) {
   }
 }
 
+export function directoryMeta() {
+  const canonical = `https://${network.domain}/`
+  const title = `${network.name} | Find a junk-car buyer`
+  const description = network.tagline
+  return {
+    title,
+    description,
+    path: '/',
+    canonical,
+    robots: 'index,follow',
+    affiliate: '',
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'Organization',
+          name: network.name,
+          url: canonical,
+          description,
+        },
+        {
+          '@type': 'WebSite',
+          name: network.name,
+          url: canonical,
+          description,
+        },
+      ],
+    },
+  }
+}
+
+function withAffiliate(meta) {
+  const current = getActiveSite()
+  const affiliate = current && current.kind !== 'directory' ? current.subdomain || '' : ''
+  return { ...meta, affiliate }
+}
+
 export function pageMeta(pathname) {
   const path = normalizePath(pathname)
-  if (path === '/') return homeMeta()
+  if (getActiveSite()?.kind === 'directory') {
+    if (path === '/') return directoryMeta()
+    return withAffiliate({
+      ...notFoundMeta(path),
+      title: `Page not found | ${network.name}`,
+      description: `That page is not on ${network.name}.`,
+    })
+  }
+  if (path === '/') return withAffiliate(homeMeta())
   const city = cityFromPath(path)
-  if (city) return cityMeta(city)
-  return notFoundMeta(path)
+  if (city) return withAffiliate(cityMeta(city))
+  return withAffiliate(notFoundMeta(path))
 }
 
 export function sitemapPaths() {

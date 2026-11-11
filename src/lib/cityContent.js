@@ -1,4 +1,4 @@
-import site from '../../site.config.js'
+import site from './site.js'
 import { listAnd, serviceAreaCities, vehiclePhrase } from './site.js'
 
 export function citySlug(name) {
