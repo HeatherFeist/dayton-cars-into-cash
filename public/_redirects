@@ -1,0 +1,3 @@
+# Cloudflare Pages: serve a real file when it exists, otherwise the home page.
+# City pages are real files, so they are not rewritten.
+/*    /index.html   200

@@ -9,8 +9,8 @@
 
 export const OTHER = 'Other'
 
-// Ordered roughly by how often these show up in the Dayton/Ohio used + junk
-// market. Each array is the make's common models, alphabetical-ish, "Other"
+// Common makes and models for the offer form. Each array is the make's
+// common models, alphabetical-ish, "Other"
 // appended at build time below so we never forget it. Coverage now reaches
 // back to the late 1970s (see QuoteForm.jsx's OLDEST_YEAR), so each make also
 // lists its common classic-era ("malaise era" through '90s) models.
