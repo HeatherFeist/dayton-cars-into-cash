@@ -6,7 +6,6 @@ import {
   formEndpoint,
   leadMessage,
   mailtoHref,
-  netlifyFormName,
   textHref,
 } from '../lib/submitLead'
 import site from '../lib/site'
@@ -38,7 +37,6 @@ export default function OfferForm({ source = 'home' }) {
   const isOtherMake = form.make === OTHER
   const modelOptions = useMemo(() => modelsForMake(form.make), [form.make])
   const endpoint = formEndpoint()
-  const netlifyName = netlifyFormName()
 
   function update(event) {
     const { name, value } = event.target
@@ -70,7 +68,7 @@ export default function OfferForm({ source = 'home' }) {
       return
     }
     const data = payload()
-    if (endpoint || netlifyName) {
+    if (endpoint) {
       setStatus('submitting')
       const result = await deliverLead(data)
       if (result.ok) {
@@ -152,11 +150,7 @@ export default function OfferForm({ source = 'home' }) {
         method="POST"
         action={endpoint ? endpoint.endpoint : undefined}
         onSubmit={handleSubmit}
-        {...(netlifyName
-          ? { 'data-netlify': 'true', name: netlifyName, 'data-netlify-honeypot': 'bot-field' }
-          : {})}
       >
-        {netlifyName && <input type="hidden" name="form-name" value={netlifyName} />}
         <p className="hp">
           <label>
             Leave this empty

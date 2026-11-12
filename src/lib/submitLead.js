@@ -1,5 +1,5 @@
 import site from './site.js'
-import { isBlank, publicEmail, publicHttpUrl, smsHref } from './site.js'
+import { publicEmail, publicHttpUrl, smsHref } from './site.js'
 
 export function leadFields(data) {
   return {
@@ -34,12 +34,6 @@ export function formEndpoint() {
   return endpoint ? { endpoint, format } : null
 }
 
-export function netlifyFormName() {
-  const name = String(site.leadForm?.netlifyFormName || '').trim()
-  if (isBlank(name) || !/^[a-z0-9-]+$/i.test(name)) return ''
-  return name
-}
-
 export function mailtoHref(data) {
   const email = publicEmail()
   if (!email) return ''
@@ -68,16 +62,6 @@ async function postForm(endpoint, fields) {
   return res.ok
 }
 
-async function postNetlify(name, fields) {
-  const body = new URLSearchParams({ 'form-name': name, ...fields })
-  const res = await fetch('/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body,
-  })
-  return res.ok
-}
-
 /**
  * Try the configured form address. Returns
  *   { ok: true } when it was accepted
@@ -88,23 +72,15 @@ async function postNetlify(name, fields) {
 export async function deliverLead(data) {
   const fields = leadFields(data)
   const target = formEndpoint()
-  const netlify = netlifyFormName()
+  if (!target) return { ok: false, cors: false }
 
   try {
-    if (target) {
-      const ok =
-        target.format === 'json'
-          ? await postJson(target.endpoint, fields)
-          : await postForm(target.endpoint, fields)
-      return { ok, cors: false }
-    }
-    if (netlify) {
-      const ok = await postNetlify(netlify, fields)
-      return { ok, cors: false }
-    }
+    const ok =
+      target.format === 'json'
+        ? await postJson(target.endpoint, fields)
+        : await postForm(target.endpoint, fields)
+    return { ok, cors: false }
   } catch {
     return { ok: false, cors: true }
   }
-
-  return { ok: false, cors: false }
 }

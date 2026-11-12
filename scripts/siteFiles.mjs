@@ -1,7 +1,6 @@
 import network from '../network.config.js'
 import { setActiveSite } from '../src/lib/activeSite.js'
 import { homeDescription } from '../src/lib/content.js'
-import { netlifyFormName } from '../src/lib/submitLead.js'
 import { pageMeta, sitemapPaths } from '../src/lib/seo.js'
 import { directoryPageMeta } from '../src/lib/yards.js'
 import site, { siteOrigin, themeCss } from '../src/lib/site.js'
@@ -83,14 +82,6 @@ function analyticsSnippets() {
   return parts.join('\n    ')
 }
 
-export function netlifyFormHtml() {
-  const name = netlifyFormName()
-  if (!name) return ''
-  const fields = ['year', 'make', 'model', 'condition', 'zip', 'name', 'phone', 'page', 'business']
-  const inputs = fields.map((field) => `<input name="${field}" />`).join('')
-  return `<form name="${escapeHtml(name)}" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden><input name="form-name" value="${escapeHtml(name)}" />${inputs}<input name="bot-field" /></form>`
-}
-
 export function fillTemplate(html, meta, { appHtml = '' } = {}) {
   const jsonLd = `<script id="site-jsonld" type="application/ld+json">${JSON.stringify(meta.jsonLd).replace(/</g, '\\u003c')}</script>`
   let out = html
@@ -106,7 +97,6 @@ export function fillTemplate(html, meta, { appHtml = '' } = {}) {
   out = replaceToken(out, '__PATH__', escapeHtml(meta.path))
   out = replaceToken(out, '__AFFILIATE__', escapeHtml(meta.affiliate || ''))
   out = replaceToken(out, '__APP__', appHtml)
-  out = replaceToken(out, '__NETLIFY_FORM__', netlifyFormHtml())
   return out
 }
 

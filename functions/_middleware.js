@@ -1,3 +1,4 @@
+// Cloudflare Pages. Sends sandys.wepay4cars.com to that yard's pages.
 import { isApexHost, publicPathFromAff, rewritePath, subdomainFromHost, NETWORK_DOMAIN } from '../src/lib/hostRouter.js'
 
 export async function onRequest(context) {

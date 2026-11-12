@@ -193,13 +193,9 @@ const site = {
   // format 'form' sends regular form fields. format 'json' sends JSON.
   // Leave endpoint blank and the form opens a text message or an email
   // with the customer's answers already filled in. No account is required.
-  //
-  // Netlify only: set netlifyFormName to a short word like 'offer' and
-  // Netlify will store submissions. Leave it blank on any other host.
   leadForm: {
     endpoint: '',
     format: 'form',
-    netlifyFormName: '',
   },
 
   // Short video at the top of the home page. The sample file is the

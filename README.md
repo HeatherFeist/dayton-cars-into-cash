@@ -42,10 +42,9 @@ The form asks for year, make, model, condition, ZIP code, name, and phone.
 
 **Easiest:** leave `leadForm.endpoint` blank. When someone sends the form, their phone opens a text message to you with the details already typed. If a text number is not set, it opens an email instead. You do not pay anyone, and there is no account to create.
 
-**If you want the form to land in an inbox without opening the customer's phone:** paste a form web address into `leadForm.endpoint`. Any service that accepts a normal form submission works. People often use the free tier of Formspree, Getform, or Basin, Netlify's built-in forms, or a Google Sheet script. You create that address on their site and paste it here. Do not put passwords or secret keys in this file.
+**If you want the form to land in an inbox without opening the customer's phone:** paste a form web address into `leadForm.endpoint`. Any service that accepts a normal form submission works. People often use the free tier of Formspree, Getform, or Basin, or a Google Sheet script. You create that address on their site and paste it here. Do not put passwords or secret keys in this file.
 
 - Leave `format` as `'form'` unless the service you chose tells you it wants JSON.
-- On Netlify only, you can set `netlifyFormName` to `offer` and leave the endpoint blank. Netlify stores the submissions for you.
 
 If the form address is missing or the browser cannot reach it, the site falls back to the text message or email. Test it once before you advertise: send a fake car and confirm you actually receive it.
 
@@ -58,29 +57,19 @@ The clip at the top of the home page is the **sample yard's** video. It may say 
 
 ## 5. Put it on the internet
 
-This is a simple static site. Netlify, Vercel, and Cloudflare Pages can all host it. The project is already set up for all three. You do not pick a database.
+This site is hosted on Cloudflare Pages. You do not pick a database.
 
-Ask your web person to connect this project to one of those hosts, or do this yourself:
+1. In the Cloudflare dashboard, open **Workers & Pages**, then **Create**, then **Pages**, then **Connect to Git**.
+2. Choose this project. Build command: `npm run build`. Output folder: `dist`.
+3. Save and deploy. Every time a change is pushed, Cloudflare rebuilds the site.
 
-**Netlify**
+After the first deploy, add the domain:
 
-1. Go to [netlify.com](https://www.netlify.com) and add a new site from your Git repository.
-2. Leave the build command as `npm run build` and the publish folder as `dist`. Those are already saved in `netlify.toml`.
-3. Publish. Every time you save a change to `site.config.js` and it is pushed, Netlify rebuilds the site.
+1. In that Pages project, open **Custom domains**.
+2. Add `wepay4cars.com`.
+3. Add `*.wepay4cars.com` as well, so a yard address such as `sandys.wepay4cars.com` reaches the same project. Cloudflare can add the DNS records when the domain is already on this Cloudflare account.
 
-**Vercel**
-
-1. Go to [vercel.com](https://vercel.com) and import the repository.
-2. Framework: Vite. Build command: `npm run build`. Output folder: `dist`.
-3. Deploy.
-
-**Cloudflare Pages**
-
-1. Go to the Cloudflare dashboard, Pages, and create a project from the repository.
-2. Build command: `npm run build`. Output folder: `dist`.
-3. Save and deploy.
-
-If you would rather hand someone a folder: they run `npm run build` on a computer, then upload the `dist` folder. That folder is the finished website, including one page per city, `sitemap.xml`, and the icon.
+The `functions` folder is what sends each yard subdomain to that yard’s pages. Leave it in the project.
 
 After it is live, open the home page and one city page on your phone. Tap the call button. Send a test offer. Click a city in the service-area list and confirm the headline names that city.
 
@@ -104,7 +93,7 @@ Each yard is one block in `affiliates.config.js`. The sample yard is already the
 
 Their pages stay on their subdomain: `sandys.wepay4cars.com` is Sandy's home page, and `sandys.wepay4cars.com/areas/denver` is one town she picks up in.
 
-Before the subdomains work in a browser, the domain settings for `wepay4cars.com` need one extra record so every name in front of the domain (the `*` record) points at the same site as `wepay4cars.com`. The person who handles the domain can add that. Until then, a yard can still be opened at `wepay4cars.com/_aff/sandys/`.
+Yard addresses such as `sandys.wepay4cars.com` start working after `*.wepay4cars.com` is added as a custom domain on the Cloudflare Pages project. Until then, a yard can still be opened at `wepay4cars.com/_aff/sandys/`.
 
 Leave `siteUrl` as `https://example.com` unless the yard has bought a completely separate domain. The subdomain address is used on its own.
 
