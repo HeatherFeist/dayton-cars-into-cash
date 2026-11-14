@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import network from '../../network.config.js'
+import UsMap from '../components/UsMap'
 import { citiesInState, directoryPageMeta, parseDirectoryPath } from '../lib/yards'
 import { US_STATES } from '../lib/usStates'
 
@@ -81,6 +82,8 @@ export default function DirectoryPage({ path = '/' }) {
             ))}
           </div>
         )}
+        <p className="directory-map-lead">Or click another state on the map.</p>
+        <UsMap selected={page.state.abbr} activeAbbrs={activeStateAbbrs()} />
       </Shell>
     )
   }
@@ -139,10 +142,24 @@ function StatesHome({ query, setQuery }) {
       )
     : []
 
+  const matchAbbrs = needle
+    ? new Set([
+        ...visibleStates.map((row) => row.state.abbr),
+        ...cityHits.map((city) => city.state.abbr),
+      ])
+    : null
+  const activeAbbrs = useMemo(
+    () => new Set(states.filter((row) => row.cities.length).map((row) => row.state.abbr)),
+    [states],
+  )
+
   return (
     <Shell crumb={null}>
       <h1>Choose your state</h1>
       <p>{network.tagline}</p>
+      <p className="directory-map-lead">
+        Click a state on the map to see its cities, then open a yard’s own website.
+      </p>
       <label className="directory-search">
         <span>Search by state or city</span>
         <input
@@ -152,6 +169,7 @@ function StatesHome({ query, setQuery }) {
           onChange={(event) => setQuery(event.target.value)}
         />
       </label>
+      <UsMap activeAbbrs={activeAbbrs} matchAbbrs={matchAbbrs} />
       {cityHits.length > 0 && (
         <div className="directory-grid directory-grid--on-dark">
           {cityHits.map((city) => (
@@ -179,4 +197,8 @@ function StatesHome({ query, setQuery }) {
       )}
     </Shell>
   )
+}
+
+function activeStateAbbrs() {
+  return new Set(US_STATES.filter((state) => citiesInState(state).length).map((state) => state.abbr))
 }
