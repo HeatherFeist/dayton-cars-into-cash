@@ -48,10 +48,11 @@ const site = {
   trustLine: 'Trusted by drivers across the Miami Valley',
 
   // How the phone number LOOKS, and the number phones should dial.
+  // Replace 555-5555 with the yard's real number before launch.
   // phoneTel and smsTel need the country code: +1 then 10 digits.
-  phoneDisplay: '(937) 296-6755',
-  phoneTel: '+19372966755',
-  smsTel: '+19372966755',
+  phoneDisplay: '555-5555',
+  phoneTel: '+15555555555',
+  smsTel: '+15555555555',
 
   // Public email. Leave blank to hide it. Offers can also be emailed here
   // when no form address is set below.
