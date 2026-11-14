@@ -15,7 +15,7 @@ Change the words between the quotes. Each line has a note above it that says wha
 Change these before you show the site to customers:
 
 - **Business name** and the sentence under the big headline
-- **Phone number** (the way it looks, and the dialing number that starts with `+1`)
+- **Phone number.** The sample shows 555-5555. Put the yard's real number in `phoneDisplay`, and the same number with +1 in `phoneTel` and `smsTel` (ten digits after +1).
 - **Text number**, if texts should go to a different phone
 - **Email**, if you want one shown and used as a backup
 - **City, state, and how many miles** you will drive for a pickup
@@ -75,7 +75,7 @@ After it is live, open the home page and one city page on your phone. Tap the ca
 
 ## Before you advertise
 
-- [ ] Business name, phone, and text number are yours
+- [ ] Business name is yours, and 555-5555 is replaced with the yard's real phone number
 - [ ] `subdomain` is the yard's real business name, with no spaces
 - [ ] The city list is only places you will pick up
 - [ ] Every promise on the page is true (free towing, same-day pickup, how you pay)
