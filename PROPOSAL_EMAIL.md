@@ -1,5 +1,12 @@
 # Founding-Client Proposal — Email Draft
 
+Historical note. The live product is the rebrandable template in `README.md`
+and `site.config.js`. This draft describes an earlier custom build (quote
+wizard, on-screen estimate, private database). Do not send it as a
+description of the current site without rewriting it.
+
+
+
 Paste-ready email for sending the client the pricing. Replace the [bracketed]
 bits and adjust any numbers before sending. The matching editable web version
 lives as an Artifact (private link — share from its page when ready).

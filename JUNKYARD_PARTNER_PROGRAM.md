@@ -1,10 +1,9 @@
 # Junkyard Partner Program — Pricing, Sales Page & Ad Copy
 
-Productized version of this site (We Pay 4 Cars), rebranded and resold to
-junkyard/auto-recycling owners in other markets. Your current client (the
-founding/pilot client, given the build for free per your agreement) is the
-one relationship-selling this to other owners; you split revenue 50/50 with
-them on every sale, per your plan.
+Productized version of this site, rebranded per yard from `site.config.js`
+and resold to junkyard/auto-recycling owners. The sample values in that file
+are only an example. A founding yard can relationship-sell this to other
+owners; get any revenue split in writing before you do.
 
 **Read the notes at the bottom before sending any of this out** — there's a
 real legal consideration on the revenue-share structure.
@@ -20,22 +19,20 @@ real legal consideration on the revenue-share structure.
 | **Who it's for** | Owner is comfortable managing their own domain/hosting, just wants the site | Owner wants it fully handled, ongoing | Owner wants us actively driving and growing lead volume |
 
 ### Starter — $2,500–$3,500 one-time
-- Full rebrand: their business name, logo, colors, phone number, service-area
-  cities swapped in.
-- Their own domain connected, their own Supabase project (leads stay theirs,
-  private).
+- Full rebrand: their business name, logo, colors, phone number, and
+  service-area cities, all in `site.config.js`. See `README.md`.
+- Their own domain. Offer requests go to their form address, or to a text
+  message / email on their phone. No shared database.
 - Deployed and handed off. They own hosting/domain from day one.
-- No ongoing support included — docs only (same docs this repo already has:
-  `PUSHOVER_SETUP.md`, `ADMIN_PANEL.md`, etc., rebranded).
+- No ongoing support included — the launch guide is `README.md`.
 - Optional $99/mo if they'd rather we keep managing hosting for them.
 
 ### Done-For-You — $5,000–$8,000 one-time + $150–250/mo
 *(This is the tier that matches what you already built and priced once —
 see `PROPOSAL_EMAIL.md` for the comparable founding-client numbers.)*
 - Everything in Starter, but we do all the setup work: domain, hosting,
-  Supabase, Pushover lead alerts wired to their phone, admin leads dashboard
-  configured with their own password, pickup-scheduling calendar link,
-  service-area copy tailored to their actual region, one round of revisions.
+  the form address or text/email delivery, service-area cities, one round
+  of revisions.
 - Monthly retainer: uptime monitoring, backups, small copy/content edits,
   a monthly leads report. Cancel anytime — this is recurring income, protect
   it the way the notes in `PROPOSAL_EMAIL.md` already say to.
@@ -59,16 +56,15 @@ ongoing labor (video, SEO, ad management), not just a website.
 
 **Subject: A lead-generating website, already proven, built for your yard**
 
-You're not buying a template — you're buying a system that's already live
-and taking real leads for a junkyard in the Dayton, OH market: an instant
-online cash-offer estimator, free-towing messaging that removes the biggest
-objection sellers have, a private lead dashboard, and same-day pickup
-scheduling — all built to turn "I need to get rid of this car" searches into
-phone calls and booked pickups.
+You're buying a junk-car website that is already built: a short offer form,
+tap-to-call on the phone, a page for every city you serve, and free-towing
+messaging you only turn on if you really offer it. It is built to turn
+"I need to get rid of this car" searches into phone calls.
 
 We rebrand the entire thing for your business — your name, your logo, your
-phone number, your service area — and connect it to your own private lead
-database. You're never sharing customer data with another yard.
+phone number, your service area — from one settings file. Leads go to your
+form inbox, your text messages, or your email. You are not sharing customer
+data with another yard.
 
 **Three ways to start:**
 - **Starter ($2,500–3,500):** the rebranded site, handed off, you run it.
@@ -127,8 +123,8 @@ quote form is the destination for every link.
 **Funnel logic (same for both videos):**
 1. Video hook stops the scroll (cash fast, or clear the clutter).
 2. Caption CTA drives one action: comment a keyword, or tap the bio link.
-3. Link goes straight to the site → quote form → Pushover alert to the
-   owner the moment a lead comes in.
+3. Link goes straight to the site → offer form → the yard's text, email,
+   or form inbox.
 
 ### Facebook / Instagram Reels
 
@@ -162,26 +158,25 @@ once volume justifies it, since it also boosts the post's engagement/reach.
 
 **Posting cadence to start:** 2–3 posts/week per platform, alternating
 Video 1 and Video 2 (plus the 25-sec cuts as separate posts), tagged with
-which video/platform/city each lead came from (via `trackClick`-style
-tagging already used on the site, so results are comparable per market).
+which video/platform/city each lead came from. If the yard pastes a Google
+Analytics ID into `site.config.js`, call taps can be counted there.
 
 ---
 
 ## 4. Recruitment ad (to find junkyard owners to sell the package to)
 
 **Short version (social/DM outreach):**
-> We built the website that's already generating cash-offer leads for a
-> junkyard in Dayton, OH — instant online estimates, free-towing messaging,
-> leads landing straight on the owner's phone. Now offering the same system,
-> fully rebranded, to yards in other markets. Starts at $2,500. Reply for a
-> 10-minute walkthrough of the live site.
+> We built a junk-car website yards can launch under their own name: a short
+> offer form, tap-to-call, and a page for every city they pick up in. Leads
+> land on the owner's phone. Fully rebranded per yard. Starts at $2,500.
+> Reply for a 10-minute walkthrough.
 
 **Slightly longer version (industry forum / Facebook group post):**
 > If you run a junkyard or auto-recycling business and your website is just
 > a phone number and an address, you're leaving leads on the table. We built
-> a system that's live right now for a yard in Dayton, OH: instant online
-> cash offers, a private lead dashboard, same-day pickup scheduling, and
-> automatic phone alerts the second a lead comes in. We're opening it up to
+> a site you can put your own name, phone number, and cities on: an offer
+> form, tap-to-call, and a page for each city you serve. Leads come to your
+> phone. We're opening it up to
 > a handful of other markets, fully rebranded for your business — packages
 > start at $2,500 one-time, with done-for-you and full-growth options
 > available. Comment or DM and I'll send a walkthrough of the live site.
