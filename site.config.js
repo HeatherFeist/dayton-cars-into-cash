@@ -188,16 +188,27 @@ const site = {
     plausibleDomain: '',
   },
 
-  // Where the "Get an offer" form is sent.
+  // Where the "Get an offer" form is sent, in addition to the private inbox.
   // Paste any https form address that accepts a normal form POST
   // (Formspree, Getform, Basin, a Google Apps Script, your own webhook).
   // format 'form' sends regular form fields. format 'json' sends JSON.
-  // Leave endpoint blank and the form opens a text message or an email
-  // with the customer's answers already filled in. No account is required.
+  // Leave endpoint blank and, if the database is not set up yet, the form
+  // opens a text message or an email with the answers already filled in.
   leadForm: {
     endpoint: '',
     format: 'form',
   },
+
+  // Ballpark offer math. Dollars per ton of scrap steel. This is a knob
+  // for the estimate, not a price you publish on the page. The customer
+  // still sees a range, and you confirm the cash offer by phone.
+  scrapRatePerTon: 180,
+
+  // Private lead dashboard password for THIS yard. Leave blank to hide
+  // the dashboard. The password ships in the page, so it only keeps
+  // casual visitors out — see ADMIN_PANEL.md. Change it before you share
+  // the live inbox. The sample uses Admin so the Dayton demo can be opened.
+  inboxPassword: 'Admin',
 
   // Short video at the top of the home page. The sample file is the
   // original Dayton explainer — replace public/explainer.mp4 or clear

@@ -8,7 +8,7 @@ export function steps() {
   },
   {
     title: 'Get Your Offer',
-    body: 'We call you to confirm a cash offer. Nothing is scheduled until you say yes.',
+    body: 'See a ballpark cash range based on what you told us. We call you to confirm the offer. Nothing is scheduled until you say yes.',
   },
   {
     title: 'Get Paid at Pickup',
@@ -20,7 +20,7 @@ export function steps() {
 }
 
 export function heroPoints() {
-  const points = ['Request a cash offer online']
+  const points = ['Get a ballpark cash offer online']
   if (site.claims.freeTowing) {
     points.push(`Free towing up to ${site.serviceRadiusMiles} miles from ${site.primaryCity}`)
   }
@@ -86,7 +86,7 @@ export function formDisclaimer() {
   const towing = site.claims.freeTowing
     ? ` Free towing within ${site.serviceRadiusMiles} miles of ${site.primaryCity}.`
     : ''
-  return `We'll call to confirm your offer. No obligation.${towing}`
+  return `You'll see a ballpark range based on what you told us. We'll call to confirm your offer. No obligation.${towing}`
 }
 
 export function homeDescription() {
@@ -102,7 +102,7 @@ export function buildFaqs() {
   const faqs = [
     {
       q: 'How much is my junk car worth?',
-      a: 'It depends on the year, make, model, condition, and current scrap prices. Tell us about the vehicle and we will call you to confirm your cash offer. This site does not show a price, because a real offer depends on the car.',
+      a: 'It depends on the year, make, model, condition, and current scrap prices. The form gives you a ballpark range based on what you told us. We call to confirm your cash offer. That range is not a guaranteed public price.',
     },
     {
       q: 'Do you buy cars that do not run?',
