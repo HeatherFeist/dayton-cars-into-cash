@@ -6,24 +6,36 @@ export function leadFields(data) {
     year: data.year,
     make: data.make,
     model: data.model,
+    trim: data.trim || '',
+    mileage: data.mileage || '',
     condition: data.condition,
+    starts: data.starts || '',
+    whole: data.whole || '',
+    bodyDamage: data.bodyDamage || '',
+    title: data.title || '',
     zip: data.zip,
     name: data.name,
     phone: data.phone,
+    email: data.email || '',
     page: data.page || '',
     business: site.businessName,
+    yard: site.subdomain || '',
+    estimate_low: data.estimate_low ?? '',
+    estimate_high: data.estimate_high ?? '',
   }
 }
 
 export function leadMessage(data) {
-  const lines = [
-    `New vehicle offer for ${site.businessName}`,
-    `${data.year} ${data.make} ${data.model}`.trim(),
-    `Condition: ${data.condition}`,
-    `ZIP: ${data.zip}`,
-    `Name: ${data.name}`,
-    `Phone: ${data.phone}`,
-  ]
+  const vehicle = `${data.year} ${data.make} ${data.model}`.trim()
+  const lines = [`New vehicle offer for ${site.businessName}`, vehicle]
+  if (data.estimate_low != null && data.estimate_high != null && data.estimate_low !== '') {
+    lines.push(`Ballpark: $${Number(data.estimate_low).toLocaleString('en-US')}–$${Number(data.estimate_high).toLocaleString('en-US')}`)
+  }
+  if (data.condition) lines.push(`Condition: ${data.condition}`)
+  if (data.trim) lines.push(`Trim: ${data.trim}`)
+  if (data.mileage) lines.push(`Mileage: ${data.mileage}`)
+  lines.push(`ZIP: ${data.zip}`, `Name: ${data.name}`, `Phone: ${data.phone}`)
+  if (data.email) lines.push(`Email: ${data.email}`)
   if (data.page) lines.push(`Page: ${data.page}`)
   return lines.join('\n')
 }

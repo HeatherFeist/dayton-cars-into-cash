@@ -1,13 +1,18 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import site, { applyTheme, hasStreetAddress, logoAltText, publicEmail, socialLinks, telHref, visibleHours } from '../lib/site'
 import { footerLine } from '../lib/content'
 import { publicHttpUrl } from '../lib/site'
+import { inboxEnabled } from '../lib/inbox'
 import { pageMeta } from '../lib/seo'
 import { trackCall } from '../lib/track'
 import { useNavigate } from './nav'
 import network from '../../network.config.js'
+import AdminPanel from './AdminPanel'
 
-function Logo() {
+const ADMIN_TAPS = 6
+const ADMIN_TAP_WINDOW_MS = 2000
+
+function Logo({ onSecretTap }) {
   const { navigate } = useNavigate()
   const content = site.logoPath ? (
     <img className="logo__img" src={site.logoPath} alt={logoAltText()} />
@@ -15,7 +20,15 @@ function Logo() {
     <Wordmark />
   )
   return (
-    <a className="logo" href="/" title={site.businessName} onClick={(event) => navigate(event, '/')}>
+    <a
+      className="logo"
+      href="/"
+      title={site.businessName}
+      onClick={(event) => {
+        if (onSecretTap?.(event)) return
+        navigate(event, '/')
+      }}
+    >
       {content}
     </a>
   )
@@ -46,6 +59,21 @@ const NAV = [
 
 export default function Layout({ path, children }) {
   const nav = useNavigate()
+  const [adminOpen, setAdminOpen] = useState(false)
+  const tapTimes = useRef([])
+
+  function handleLogoTap(event) {
+    if (!inboxEnabled()) return false
+    const now = Date.now()
+    tapTimes.current = [...tapTimes.current, now].filter((t) => now - t <= ADMIN_TAP_WINDOW_MS)
+    if (tapTimes.current.length >= ADMIN_TAPS) {
+      tapTimes.current = []
+      event.preventDefault()
+      setAdminOpen(true)
+      return true
+    }
+    return false
+  }
 
   useEffect(() => {
     applyTheme()
@@ -72,9 +100,10 @@ export default function Layout({ path, children }) {
 
   return (
       <div className="page">
+        {adminOpen && <AdminPanel onClose={() => setAdminOpen(false)} />}
         <header className="header">
           <div className="header__inner">
-            <Logo />
+            <Logo onSecretTap={handleLogoTap} />
             <nav className="header__nav" aria-label="Primary">
               {NAV.map((link) => (
                 <a

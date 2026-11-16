@@ -1,4 +1,5 @@
 import site from './site.js'
+import { supabase } from './supabaseClient.js'
 
 function gaId() {
   const id = String(site.analytics?.googleAnalyticsId || '').trim()
@@ -12,4 +13,11 @@ export function trackCall(source, kind = 'call') {
       source,
     })
   }
+  if (!supabase) return
+  supabase
+    .from('call_clicks')
+    .insert([{ kind, source, yard: site.subdomain || '' }])
+    .then(({ error }) => {
+      if (error) console.error('call_clicks insert failed', error)
+    })
 }

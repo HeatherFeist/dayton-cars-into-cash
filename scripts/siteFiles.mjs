@@ -47,6 +47,7 @@ export function manifestJson() {
 export function robotsTxt() {
   const lines = ['User-agent: *', 'Allow: /']
   if (site.kind === 'directory') lines.push('Disallow: /_aff/')
+  else lines.push('Disallow: /inbox')
   lines.push('')
   if (siteOrigin()) lines.push(`Sitemap: ${siteOrigin()}/sitemap.xml`, '')
   return lines.join('\n')

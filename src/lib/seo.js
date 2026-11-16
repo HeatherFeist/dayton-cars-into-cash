@@ -24,7 +24,7 @@ export function normalizePath(pathname) {
 }
 
 export function allRoutes() {
-  return ['/', ...serviceAreaCities().map((city) => cityPath(city))]
+  return ['/', ...serviceAreaCities().map((city) => cityPath(city)), '/inbox']
 }
 
 function businessNode() {
@@ -208,16 +208,33 @@ export function pageMeta(pathname) {
     })
   }
   if (path === '/') return withAffiliate(homeMeta())
+  if (path === '/inbox') return withAffiliate(inboxMeta())
   const city = cityFromPath(path)
   if (city) return withAffiliate(cityMeta(city))
   return withAffiliate(notFoundMeta(path))
 }
 
+function inboxMeta() {
+  return {
+    title: `Lead inbox | ${site.businessName}`,
+    description: `Private lead inbox for ${site.businessName}.`,
+    path: '/inbox',
+    canonical: absoluteUrl('/inbox'),
+    robots: 'noindex,nofollow',
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@graph': [businessNode()],
+    },
+  }
+}
+
 export function sitemapPaths() {
-  return allRoutes().map((path) => ({
-    path,
-    loc: siteOrigin() ? absoluteUrl(path) : path,
-  }))
+  return allRoutes()
+    .filter((path) => path !== '/inbox')
+    .map((path) => ({
+      path,
+      loc: siteOrigin() ? absoluteUrl(path) : path,
+    }))
 }
 
 export { logoAltText }

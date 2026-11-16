@@ -106,7 +106,7 @@ export default function HomePage() {
             Call {site.phoneDisplay}
           </a>
           <button type="button" onClick={scrollToForm}>
-            Get My Instant Offer
+            Get My Offer
           </button>
         </div>
       </section>

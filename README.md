@@ -36,17 +36,19 @@ To use your own logo:
 1. Save the image file in the `public` folder. `logo.svg` or `logo.png` is fine.
 2. In `site.config.js`, set `logoPath` to `'/logo.svg'` (or whatever you named the file, with the slash at the front).
 
-## 3. Decide where offers go
+## 3. The quote form and the private inbox
 
-The form asks for year, make, model, condition, ZIP code, name, and phone.
+The form is a short wizard: year, make, model, a few condition questions, then name and phone. It shows a **ballpark cash range** based on what they typed. That range is not a guaranteed public price. You call to confirm the offer. `scrapRatePerTon` in `site.config.js` is the one number that rescales those estimates. Do not put that number on the public page as a published rate.
 
-**Easiest:** leave `leadForm.endpoint` blank. When someone sends the form, their phone opens a text message to you with the details already typed. If a text number is not set, it opens an email instead. You do not pay anyone, and there is no account to create.
+**Private dashboard.** Set `inboxPassword` in `site.config.js`. Open `/inbox` on that yard's site, or tap the logo six times. See `ADMIN_PANEL.md`. Leave the password blank to hide the dashboard.
 
-**If you want the form to land in an inbox without opening the customer's phone:** paste a form web address into `leadForm.endpoint`. Any service that accepts a normal form submission works. People often use the free tier of Formspree, Getform, or Basin, or a Google Sheet script. You create that address on their site and paste it here. Do not put passwords or secret keys in this file.
+**Database (needed for the dashboard).** Create a Supabase project, run the SQL in `supabase/`, and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in Cloudflare Pages, then rebuild. Details are in `supabase/README.md`.
 
-- Leave `format` as `'form'` unless the service you chose tells you it wants JSON.
+**If the database is not set yet:** leave `leadForm.endpoint` blank. When someone sends the form, their phone opens a text message to you with the details already typed. If a text number is not set, it opens an email instead.
 
-If the form address is missing or the browser cannot reach it, the site falls back to the text message or email. Test it once before you advertise: send a fake car and confirm you actually receive it.
+**If you also want a copy in a form inbox:** paste a form web address into `leadForm.endpoint`. Any service that accepts a normal form submission works (Formspree, Getform, Basin, a Google Sheet script). Do not put passwords or secret keys in this file. Leave `format` as `'form'` unless the service asks for JSON.
+
+If the database and the form address are both missing, the site falls back to the text message or email. The customer still sees the ballpark. Test it once before you advertise: send a fake car and confirm you actually receive it.
 
 ## 4. Replace the video (or hide it)
 
@@ -57,7 +59,7 @@ The clip at the top of the home page is the **sample yard's** video. It may say 
 
 ## 5. Put it on the internet
 
-This site is hosted on Cloudflare Pages. You do not pick a database.
+This site is hosted on Cloudflare Pages. The public pages do not need a database. The private lead inbox does — see step 3.
 
 1. In the Cloudflare dashboard, open **Workers & Pages**, then **Create**, then **Pages**, then **Connect to Git**.
 2. Choose this project. Build command: `npm run build`. Output folder: `dist`.
@@ -80,10 +82,11 @@ After it is live, open the home page and one city page on your phone. Tap the ca
 - [ ] The city list is only places you will pick up
 - [ ] Every promise on the page is true (free towing, same-day pickup, how you pay)
 - [ ] The sample video is replaced or hidden
-- [ ] A test offer reached you by text, email, or your form inbox
+- [ ] A test offer showed a ballpark range, and the request reached you (inbox, text, or email)
+- [ ] If you turned on the dashboard, `/inbox` on the yard site opens with your password
 - [ ] Address, hours, Google review link, and review numbers are still blank, or they are real
 
-The site will not invent a review count, a star rating, or a price. When you have real Google numbers, paste them into `googleRating`, `googleReviewCount`, and `googleReviewUrl`. Until then, that spot stays a plain sentence.
+The site will not invent a review count, a star rating, or a guaranteed cash price. The quote form's range is a ballpark you confirm by phone. When you have real Google numbers, paste them into `googleRating`, `googleReviewCount`, and `googleReviewUrl`. Until then, that spot stays a plain sentence.
 
 ## The city directory
 
